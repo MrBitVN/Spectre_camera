@@ -1,0 +1,87 @@
+/* SpectreFlow English Strings */
+"app_name" = "SpectreFlow";
+"tagline" = "AI Long Exposure Camera";
+
+/* Modes */
+"mode_auto" = "Auto";
+"mode_short_motion_blur" = "Blur";
+"mode_short_light_trails" = "Trails";
+"mode_short_vanish" = "Vanish";
+"mode_motion_blur" = "Motion Blur";
+"mode_motion_blur_desc" = "Smooth water, clouds, ghosted crowds";
+"mode_light_trails" = "Light Trails";
+"mode_light_trails_desc" = "Vehicle lights, stars, fireworks";
+"mode_vanish" = "Vanish";
+"mode_vanish_desc" = "Remove moving people & traffic via temporal median";
+
+/* Stability */
+"stability_stable" = "STABLE";
+"stability_shaky" = "SHAKY";
+
+/* Processing */
+"capturing_burst" = "Capturing burst frames…";
+"aligning_frames" = "Aligning frames with Vision registration…";
+"blending_frames" = "Blending long exposure composite…";
+
+/* Result */
+"result_title" = "Long Exposure Result";
+"action_save" = "Save";
+"action_share" = "Share";
+"action_share_video" = "Share Video";
+"action_export_wallpaper" = "Wallpaper";
+"hint_wallpaper_saved" = "Looping wallpaper saved to Photos!";
+"action_discard" = "Discard";
+"action_pick_as_cover" = "Pick as Result";
+"label_scrub_frames" = "Scrub burst frames";
+"label_composite_result" = "Long Exposure Composite";
+"label_composite_active" = "Long Exposure Active";
+"label_frame_index" = "Frame %d of %d";
+"save_success" = "Saved to Photos successfully!";
+"save_failed" = "Failed to save photo.";
+
+/* Settings */
+"settings_title" = "Settings";
+"setting_grid" = "Rule of Thirds Grid";
+"setting_haptics" = "Haptic Feedback";
+"setting_companion_video" = "Save Companion Video";
+"setting_companion_video_desc" = "Record a paired MOV video to scrub alternative frames and save as Live Photo";
+"setting_resolution" = "Output Quality";
+"resolution_high" = "High (4K / Full)";
+"resolution_balanced" = "Balanced (1080p)";
+"setting_language" = "Language";
+"setting_app_icon" = "App Icon Theme";
+"setting_pro_unlocked" = "SpectreFlow Pro Unlocked";
+"setting_pro_desc" = "Unlocks 15s & 30s exposures and custom app icons";
+
+/* Prompts & Hints */
+"hint_press_hold" = "Press & hold to expose";
+"hint_release_to_capture" = "Release to capture • Max %ds";
+"hint_hold_longer" = "Hold longer to capture (min 1s)";
+"hint_pro_required" = "SpectreFlow Pro required for %ds exposure";
+"limited_access_hint" = "Limited photo access: photos will still save directly to your library";
+"action_view_tutorial" = "View Interactive Tutorial";
+
+/* Onboarding */
+"action_skip" = "Skip";
+"action_next" = "Next";
+"onboarding_get_started" = "Get Started";
+"onboarding_step1_title" = "Hold to Expose";
+"onboarding_step1_subtitle" = "Release to synthesize long exposure";
+"onboarding_step1_bullet1" = "Press and hold the shutter button to start streaming burst frames.";
+"onboarding_step1_bullet2" = "Sensors immediately lock exposure, focus, and white balance.";
+"onboarding_step1_bullet3" = "Release anytime after 1 second to blend into a single photo.";
+"onboarding_step2_title" = "Tripod vs. Handheld";
+"onboarding_step2_subtitle" = "Real-time 6-axis gyro stability";
+"onboarding_step2_bullet1" = "STABLE badge indicates tripod mounting: alignment is bypassed to save battery.";
+"onboarding_step2_bullet2" = "SHAKY badge activates AI auto-alignment to cancel hand tremor.";
+"onboarding_step2_bullet3" = "Borders are cleanly cropped to preserve razor-sharp static details.";
+"onboarding_step3_title" = "Intelligent AI Modes";
+"onboarding_step3_subtitle" = "Auto scene analysis & manual control";
+"onboarding_step3_bullet1" = "Auto mode detects lighting and motion to select the optimal mode.";
+"onboarding_step3_bullet2" = "Motion Blur smooths silky waterfalls, fog, and passing clouds.";
+"onboarding_step3_bullet3" = "Light Trails paints night traffic and stars; Vanish erases crowds.";
+
+/* Permissions */
+"permission_camera_title" = "Camera Access Required";
+"permission_camera_desc" = "SpectreFlow needs camera access to capture burst frames for AI long exposure synthesis.";
+"permission_grant" = "Grant Access";

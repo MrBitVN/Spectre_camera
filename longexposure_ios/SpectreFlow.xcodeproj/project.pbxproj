@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A100000129B7F00100000001 /* SpectreFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000229B7F00100000001 /* SpectreFlowApp.swift */; };
+		A100000329B7F00100000001 /* LongExposureMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000429B7F00100000001 /* LongExposureMode.swift */; };
+		A100000529B7F00100000001 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000629B7F00100000001 /* AppSettings.swift */; };
+		A100000729B7F00100000001 /* StabilityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000829B7F00100000001 /* StabilityState.swift */; };
+		A100000929B7F00100000001 /* MeanBlender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000A29B7F00100000001 /* MeanBlender.swift */; };
+		A100000B29B7F00100000001 /* LightTrailsBlender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000C29B7F00100000001 /* LightTrailsBlender.swift */; };
+		A100000D29B7F00100000001 /* MedianBlender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000E29B7F00100000001 /* MedianBlender.swift */; };
+		A100000F29B7F00100000001 /* FrameBlenderEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001029B7F00100000001 /* FrameBlenderEngine.swift */; };
+		A100001129B7F00100000001 /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001229B7F00100000001 /* FrameAligner.swift */; };
+		A100001329B7F00100000001 /* MotionStabilityDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001429B7F00100000001 /* MotionStabilityDetector.swift */; };
+		A100001529B7F00100000001 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001629B7F00100000001 /* CameraService.swift */; };
+		A100001729B7F00100000001 /* PhotoLibrarySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001829B7F00100000001 /* PhotoLibrarySaver.swift */; };
+		A100001929B7F00100000001 /* Color+SpectreFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A29B7F00100000001 /* Color+SpectreFlow.swift */; };
+		A100001B29B7F00100000001 /* RingShutterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C29B7F00100000001 /* RingShutterButton.swift */; };
+		A100001D29B7F00100000001 /* StabilityBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001E29B7F00100000001 /* StabilityBadge.swift */; };
+		A100001F29B7F00100000001 /* DurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002029B7F00100000001 /* DurationSelector.swift */; };
+		A100002129B7F00100000001 /* ModeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002229B7F00100000001 /* ModeSelector.swift */; };
+		A100002329B7F00100000001 /* GridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002429B7F00100000001 /* GridOverlay.swift */; };
+		A100002529B7F00100000001 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002629B7F00100000001 /* CameraPreviewView.swift */; };
+		A100002729B7F00100000001 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002829B7F00100000001 /* CameraView.swift */; };
+		A100002929B7F00100000001 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002A29B7F00100000001 /* ProcessingView.swift */; };
+		A100002B29B7F00100000001 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002C29B7F00100000001 /* ResultView.swift */; };
+		A100002D29B7F00100000001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002E29B7F00100000001 /* SettingsView.swift */; };
+		A100002F29B7F00100000001 /* PermissionRationaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100003029B7F00100000001 /* PermissionRationaleView.swift */; };
+		A100003129B7F00100000001 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100003229B7F00100000001 /* CameraViewModel.swift */; };
+		A100003329B7F00100000001 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = A100003429B7F00100000001 /* Shaders.metal */; };
+		A100003529B7F00100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A100003629B7F00100000001 /* Localizable.strings */; };
+		A100003729B7F00100000001 /* BlendingMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100003829B7F00100000001 /* BlendingMathTests.swift */; };
+		A100003929B7F00100000001 /* AlignmentMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100003A29B7F00100000001 /* AlignmentMathTests.swift */; };
+		A100006029B7F00100000001 /* SceneDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006129B7F00100000001 /* SceneDetector.swift */; };
+		A100006229B7F00100000001 /* CompanionVideoWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006329B7F00100000001 /* CompanionVideoWriter.swift */; };
+		A100006429B7F00100000001 /* ProSubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006529B7F00100000001 /* ProSubscriptionManager.swift */; };
+		A100006629B7F00100000001 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006729B7F00100000001 /* OnboardingView.swift */; };
+		A100006829B7F00100000001 /* LensSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006929B7F00100000001 /* LensSelector.swift */; };
+		A100006A29B7F00100000001 /* TakeLongExposureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */; };
+		A100006C29B7F00100000001 /* HoldToExposeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006D29B7F00100000001 /* HoldToExposeTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A100000029B7F00100000001 /* SpectreFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpectreFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A100000229B7F00100000001 /* SpectreFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectreFlowApp.swift; sourceTree = "<group>"; };
+		A100000429B7F00100000001 /* LongExposureMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongExposureMode.swift; sourceTree = "<group>"; };
+		A100000629B7F00100000001 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A100000829B7F00100000001 /* StabilityState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StabilityState.swift; sourceTree = "<group>"; };
+		A100000A29B7F00100000001 /* MeanBlender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeanBlender.swift; sourceTree = "<group>"; };
+		A100000C29B7F00100000001 /* LightTrailsBlender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightTrailsBlender.swift; sourceTree = "<group>"; };
+		A100000E29B7F00100000001 /* MedianBlender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedianBlender.swift; sourceTree = "<group>"; };
+		A100001029B7F00100000001 /* FrameBlenderEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameBlenderEngine.swift; sourceTree = "<group>"; };
+		A100001229B7F00100000001 /* FrameAligner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAligner.swift; sourceTree = "<group>"; };
+		A100001429B7F00100000001 /* MotionStabilityDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionStabilityDetector.swift; sourceTree = "<group>"; };
+		A100001629B7F00100000001 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		A100001829B7F00100000001 /* PhotoLibrarySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrarySaver.swift; sourceTree = "<group>"; };
+		A100001A29B7F00100000001 /* Color+SpectreFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+SpectreFlow.swift"; sourceTree = "<group>"; };
+		A100001C29B7F00100000001 /* RingShutterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingShutterButton.swift; sourceTree = "<group>"; };
+		A100001E29B7F00100000001 /* StabilityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StabilityBadge.swift; sourceTree = "<group>"; };
+		A100002029B7F00100000001 /* DurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationSelector.swift; sourceTree = "<group>"; };
+		A100002229B7F00100000001 /* ModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelector.swift; sourceTree = "<group>"; };
+		A100002429B7F00100000001 /* GridOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
+		A100002629B7F00100000001 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		A100002829B7F00100000001 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A100002A29B7F00100000001 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
+		A100002C29B7F00100000001 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		A100002E29B7F00100000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A100003029B7F00100000001 /* PermissionRationaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRationaleView.swift; sourceTree = "<group>"; };
+		A100003229B7F00100000001 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		A100003429B7F00100000001 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		A100003629B7F00100000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A100003829B7F00100000001 /* BlendingMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendingMathTests.swift; sourceTree = "<group>"; };
+		A100003A29B7F00100000001 /* AlignmentMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentMathTests.swift; sourceTree = "<group>"; };
+		A100003B29B7F00100000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A100006129B7F00100000001 /* SceneDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AI/SceneDetector.swift; sourceTree = "<group>"; };
+		A100006329B7F00100000001 /* CompanionVideoWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video/CompanionVideoWriter.swift; sourceTree = "<group>"; };
+		A100006529B7F00100000001 /* ProSubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Billing/ProSubscriptionManager.swift; sourceTree = "<group>"; };
+		A100006729B7F00100000001 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/OnboardingView.swift; sourceTree = "<group>"; };
+		A100006929B7F00100000001 /* LensSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/LensSelector.swift; sourceTree = "<group>"; };
+		A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts/TakeLongExposureIntent.swift; sourceTree = "<group>"; };
+		A100006D29B7F00100000001 /* HoldToExposeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToExposeTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		A100003C29B7F00100000001 = {
+			isa = PBXGroup;
+			children = (
+				A100003D29B7F00100000001 /* SpectreFlow */,
+				A100003E29B7F00100000001 /* SpectreFlowTests */,
+				A100003F29B7F00100000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A100003D29B7F00100000001 /* SpectreFlow */ = {
+			isa = PBXGroup;
+			children = (
+				A100000229B7F00100000001 /* SpectreFlowApp.swift */,
+				A100003B29B7F00100000001 /* Info.plist */,
+				A100004029B7F00100000001 /* Model */,
+				A100004129B7F00100000001 /* Blender */,
+				A100004229B7F00100000001 /* Alignment */,
+				A100004329B7F00100000001 /* Sensor */,
+				A100004429B7F00100000001 /* Camera */,
+				A100004529B7F00100000001 /* Storage */,
+				A100004629B7F00100000001 /* UI */,
+				A100004729B7F00100000001 /* ViewModel */,
+				A100004829B7F00100000001 /* Resources */,
+			);
+			path = SpectreFlow;
+			sourceTree = "<group>";
+		};
+		A100004029B7F00100000001 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A100000429B7F00100000001 /* LongExposureMode.swift */,
+				A100000629B7F00100000001 /* AppSettings.swift */,
+				A100000829B7F00100000001 /* StabilityState.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A100004129B7F00100000001 /* Blender */ = {
+			isa = PBXGroup;
+			children = (
+				A100000A29B7F00100000001 /* MeanBlender.swift */,
+				A100000C29B7F00100000001 /* LightTrailsBlender.swift */,
+				A100000E29B7F00100000001 /* MedianBlender.swift */,
+				A100001029B7F00100000001 /* FrameBlenderEngine.swift */,
+				A100003429B7F00100000001 /* Shaders.metal */,
+			);
+			path = Blender;
+			sourceTree = "<group>";
+		};
+		A100004229B7F00100000001 /* Alignment */ = {
+			isa = PBXGroup;
+			children = (
+				A100001229B7F00100000001 /* FrameAligner.swift */,
+			);
+			path = Alignment;
+			sourceTree = "<group>";
+		};
+		A100004329B7F00100000001 /* Sensor */ = {
+			isa = PBXGroup;
+			children = (
+				A100001429B7F00100000001 /* MotionStabilityDetector.swift */,
+			);
+			path = Sensor;
+			sourceTree = "<group>";
+		};
+		A100004429B7F00100000001 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A100001629B7F00100000001 /* CameraService.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		A100004529B7F00100000001 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				A100001829B7F00100000001 /* PhotoLibrarySaver.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		A100004629B7F00100000001 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A100001A29B7F00100000001 /* Color+SpectreFlow.swift */,
+				A100001C29B7F00100000001 /* RingShutterButton.swift */,
+				A100001E29B7F00100000001 /* StabilityBadge.swift */,
+				A100002029B7F00100000001 /* DurationSelector.swift */,
+				A100002229B7F00100000001 /* ModeSelector.swift */,
+				A100002429B7F00100000001 /* GridOverlay.swift */,
+				A100002629B7F00100000001 /* CameraPreviewView.swift */,
+				A100002829B7F00100000001 /* CameraView.swift */,
+				A100002A29B7F00100000001 /* ProcessingView.swift */,
+				A100002C29B7F00100000001 /* ResultView.swift */,
+				A100002E29B7F00100000001 /* SettingsView.swift */,
+				A100003029B7F00100000001 /* PermissionRationaleView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A100004729B7F00100000001 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				A100003229B7F00100000001 /* CameraViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A100004829B7F00100000001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A100004929B7F00100000001 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A100003E29B7F00100000001 /* SpectreFlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				A100003829B7F00100000001 /* BlendingMathTests.swift */,
+				A100003A29B7F00100000001 /* AlignmentMathTests.swift */,
+			);
+			path = SpectreFlowTests;
+			sourceTree = "<group>";
+		};
+		A100003F29B7F00100000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A100000029B7F00100000001 /* SpectreFlow.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A100004A29B7F00100000001 /* SpectreFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A100004B29B7F00100000001 /* Build configuration list for PBXNativeTarget "SpectreFlow" */;
+			buildPhases = (
+				A100004C29B7F00100000001 /* Sources */,
+				A100004D29B7F00100000001 /* Frameworks */,
+				A100004E29B7F00100000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpectreFlow;
+			productName = SpectreFlow;
+			productReference = A100000029B7F00100000001 /* SpectreFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A100004F29B7F00100000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A100004A29B7F00100000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A100005029B7F00100000001 /* Build configuration list for PBXProject "SpectreFlow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A100003C29B7F00100000001;
+			productRefGroup = A100003F29B7F00100000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A100004A29B7F00100000001 /* SpectreFlow */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A100004E29B7F00100000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A100003529B7F00100000001 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A100004C29B7F00100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A100000129B7F00100000001 /* SpectreFlowApp.swift in Sources */,
+				A100000329B7F00100000001 /* LongExposureMode.swift in Sources */,
+				A100000529B7F00100000001 /* AppSettings.swift in Sources */,
+				A100000729B7F00100000001 /* StabilityState.swift in Sources */,
+				A100000929B7F00100000001 /* MeanBlender.swift in Sources */,
+				A100000B29B7F00100000001 /* LightTrailsBlender.swift in Sources */,
+				A100000D29B7F00100000001 /* MedianBlender.swift in Sources */,
+				A100000F29B7F00100000001 /* FrameBlenderEngine.swift in Sources */,
+				A100001129B7F00100000001 /* FrameAligner.swift in Sources */,
+				A100001329B7F00100000001 /* MotionStabilityDetector.swift in Sources */,
+				A100001529B7F00100000001 /* CameraService.swift in Sources */,
+				A100001729B7F00100000001 /* PhotoLibrarySaver.swift in Sources */,
+				A100001929B7F00100000001 /* Color+SpectreFlow.swift in Sources */,
+				A100001B29B7F00100000001 /* RingShutterButton.swift in Sources */,
+				A100001D29B7F00100000001 /* StabilityBadge.swift in Sources */,
+				A100001F29B7F00100000001 /* DurationSelector.swift in Sources */,
+				A100002129B7F00100000001 /* ModeSelector.swift in Sources */,
+				A100002329B7F00100000001 /* GridOverlay.swift in Sources */,
+				A100002529B7F00100000001 /* CameraPreviewView.swift in Sources */,
+				A100002729B7F00100000001 /* CameraView.swift in Sources */,
+				A100002929B7F00100000001 /* ProcessingView.swift in Sources */,
+				A100002B29B7F00100000001 /* ResultView.swift in Sources */,
+				A100002D29B7F00100000001 /* SettingsView.swift in Sources */,
+				A100002F29B7F00100000001 /* PermissionRationaleView.swift in Sources */,
+				A100003129B7F00100000001 /* CameraViewModel.swift in Sources */,
+				A100003329B7F00100000001 /* Shaders.metal in Sources */,
+				A100006029B7F00100000001 /* SceneDetector.swift in Sources */,
+				A100006229B7F00100000001 /* CompanionVideoWriter.swift in Sources */,
+				A100006429B7F00100000001 /* ProSubscriptionManager.swift in Sources */,
+				A100006629B7F00100000001 /* OnboardingView.swift in Sources */,
+				A100006829B7F00100000001 /* LensSelector.swift in Sources */,
+				A100006A29B7F00100000001 /* TakeLongExposureIntent.swift in Sources */,
+				A100003729B7F00100000001 /* BlendingMathTests.swift in Sources */,
+				A100003929B7F00100000001 /* AlignmentMathTests.swift in Sources */,
+				A100006C29B7F00100000001 /* HoldToExposeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A100004D29B7F00100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A100004929B7F00100000001 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A100003629B7F00100000001 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A100005129B7F00100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A100005229B7F00100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A100005329B7F00100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SpectreFlow/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpectreFlow;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spectreflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A100005429B7F00100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SpectreFlow/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpectreFlow;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spectreflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A100005029B7F00100000001 /* Build configuration list for PBXProject "SpectreFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A100005129B7F00100000001 /* Debug */,
+				A100005229B7F00100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A100004B29B7F00100000001 /* Build configuration list for PBXNativeTarget "SpectreFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A100005329B7F00100000001 /* Debug */,
+				A100005429B7F00100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = A100004F29B7F00100000001 /* Project object */;
+}

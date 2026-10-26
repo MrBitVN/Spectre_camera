@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Camera aperture ring -->
+    <path
+        android:strokeColor="#00E676"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M54,24 A30,30 0 1,1 53.9,24" />
+    <!-- Flowing long exposure streak -->
+    <path
+        android:strokeColor="#69F0AE"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M34,54 C34,43 43,34 54,34 C65,34 74,43 74,54 C74,65 65,74 54,74 C46,74 40,68 40,60" />
+    <path
+        android:fillColor="#00E676"
+        android:pathData="M54,48 A6,6 0 1,1 53.9,48" />
+</vector>

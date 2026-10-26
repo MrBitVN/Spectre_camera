@@ -1,0 +1,87 @@
+/* SpectreFlow Vietnamese Strings */
+"app_name" = "SpectreFlow";
+"tagline" = "Máy ảnh Phơi sáng dài AI";
+
+/* Modes */
+"mode_auto" = "Tự động";
+"mode_short_motion_blur" = "Mờ";
+"mode_short_light_trails" = "Vệt sáng";
+"mode_short_vanish" = "Biến mất";
+"mode_motion_blur" = "Làm mờ chuyển động";
+"mode_motion_blur_desc" = "Nước mượt như lụa, mây trôi, bóng người mờ ảo";
+"mode_light_trails" = "Vệt sáng";
+"mode_light_trails_desc" = "Vệt đèn xe đêm, pháo hoa, vệt sao";
+"mode_vanish" = "Biến mất";
+"mode_vanish_desc" = "Xóa người và phương tiện chuyển động bằng trung vị thời gian";
+
+/* Stability */
+"stability_stable" = "ỔN ĐỊNH";
+"stability_shaky" = "RUNG LẮC";
+
+/* Processing */
+"capturing_burst" = "Đang chụp chuỗi khung hình…";
+"aligning_frames" = "Đang căn chỉnh khung hình AI Vision…";
+"blending_frames" = "Đang tổng hợp phơi sáng dài…";
+
+/* Result */
+"result_title" = "Kết quả Phơi sáng dài";
+"action_save" = "Lưu lại";
+"action_share" = "Chia sẻ";
+"action_share_video" = "Chia sẻ Video";
+"action_export_wallpaper" = "Hình nền";
+"hint_wallpaper_saved" = "Đã lưu video lặp hình nền vào Album!";
+"action_discard" = "Bỏ qua";
+"action_pick_as_cover" = "Chọn làm kết quả";
+"label_scrub_frames" = "Tua chọn khung hình";
+"label_composite_result" = "Ảnh phơi sáng tổng hợp";
+"label_composite_active" = "Đang chọn ảnh tổng hợp";
+"label_frame_index" = "Khung hình %d / %d";
+"save_success" = "Đã lưu vào Album Ảnh thành công!";
+"save_failed" = "Lưu ảnh thất bại.";
+
+/* Settings */
+"settings_title" = "Cài đặt";
+"setting_grid" = "Lưới bố cục 3x3";
+"setting_haptics" = "Rung phản hồi";
+"setting_companion_video" = "Lưu Video kèm theo (Live Photo)";
+"setting_companion_video_desc" = "Lưu video MOV đi kèm để tua chọn khung hình khác và lưu dạng Live Photo";
+"setting_resolution" = "Độ phân giải ảnh";
+"resolution_high" = "Cao (4K / Gốc)";
+"resolution_balanced" = "Cân bằng (1080p)";
+"setting_language" = "Ngôn ngữ";
+"setting_app_icon" = "Biểu tượng ứng dụng";
+"setting_pro_unlocked" = "Mở khóa SpectreFlow Pro";
+"setting_pro_desc" = "Mở khóa thời lượng 15s & 30s và biểu tượng Pro";
+
+/* Prompts & Hints */
+"hint_press_hold" = "Nhấn & giữ để phơi sáng";
+"hint_release_to_capture" = "Thả tay để chụp • Tối đa %ds";
+"hint_hold_longer" = "Giữ lâu hơn để chụp (tối thiểu 1 giây)";
+"hint_pro_required" = "Cần SpectreFlow Pro cho phơi sáng %ds";
+"limited_access_hint" = "Quyền ảnh giới hạn: ảnh và video vẫn được lưu trực tiếp vào bộ sưu tập";
+"action_view_tutorial" = "Xem hướng dẫn tương tác";
+
+/* Onboarding */
+"action_skip" = "Bỏ qua";
+"action_next" = "Tiếp tục";
+"onboarding_get_started" = "Bắt đầu ngay";
+"onboarding_step1_title" = "Nhấn & Giữ để Chụp";
+"onboarding_step1_subtitle" = "Thả tay để hoàn tất phơi sáng dài";
+"onboarding_step1_bullet1" = "Nhấn và giữ nút chụp để bắt đầu chuỗi khung hình liên tiếp.";
+"onboarding_step1_bullet2" = "Cảm biến sẽ tự động khóa sáng, lấy nét và cân bằng trắng ngay lập tức.";
+"onboarding_step1_bullet3" = "Thả tay bất cứ khi nào sau 1 giây để tổng hợp thành một bức ảnh hoàn chỉnh.";
+"onboarding_step2_title" = "Chân máy & Cầm tay";
+"onboarding_step2_subtitle" = "Cảm biến con quay hồi chuyển 6 trục";
+"onboarding_step2_bullet1" = "Huy hiệu ỔN ĐỊNH: Bỏ qua căn chỉnh để tiết kiệm pin tối đa.";
+"onboarding_step2_bullet2" = "Huy hiệu RUNG LẮC: Bật AI Vision căn chỉnh bù trừ chuyển động tay.";
+"onboarding_step2_bullet3" = "Viền ảnh được xén thông minh giữ chi tiết tĩnh sắc nét tối đa.";
+"onboarding_step3_title" = "Chế độ AI Thông minh";
+"onboarding_step3_subtitle" = "Tự động phân tích bối cảnh & Tùy chọn";
+"onboarding_step3_bullet1" = "Chế độ Tự động nhận diện ánh sáng và chuyển động để chọn chế độ tối ưu.";
+"onboarding_step3_bullet2" = "Làm mờ chuyển động: Nước chảy mượt như lụa, mây trôi bồng bềnh.";
+"onboarding_step3_bullet3" = "Vệt sáng chụp đèn xe đêm; Biến mất để xóa người và xe cộ.";
+
+/* Permissions */
+"permission_camera_title" = "Yêu cầu quyền Camera";
+"permission_camera_desc" = "SpectreFlow cần truy cập máy ảnh để chụp chuỗi khung hình liên tiếp phục vụ thuật toán phơi sáng dài.";
+"permission_grant" = "Cấp quyền";

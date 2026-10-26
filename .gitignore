@@ -1,0 +1,26 @@
+# Gradle & Android build
+.gradle/
+build/
+*/build/
+app/build/
+longexposure_android/build/
+longexposure_android/app/build/
+*.iml
+.idea/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Xcode & iOS build
+.DS_Store
+DerivedData/
+*.xcuserstate
+project.xcworkspace/xcuserdata/
+*.xcuserdatad
+longexposure_ios/*.xcworkspace/xcuserdata/
+longexposure_ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+longexposure_ios/*.xcodeproj/xcuserdata/
+
+# Misc
+*.log

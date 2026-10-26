@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">SpectreFlow</string>
+    <string name="tagline">Máy ảnh Phơi sáng dài AI</string>
+
+    <!-- Modes -->
+    <string name="mode_auto">Tự động</string>
+    <string name="mode_short_motion_blur">Mờ</string>
+    <string name="mode_short_light_trails">Vệt sáng</string>
+    <string name="mode_short_vanish">Biến mất</string>
+    <string name="mode_motion_blur">Làm mờ chuyển động</string>
+    <string name="mode_motion_blur_desc">Nước chảy mượt như lụa, mây trôi bồng bềnh, bóng mờ đám đông</string>
+    <string name="mode_light_trails">Vệt sáng</string>
+    <string name="mode_light_trails_desc">Chụp vệt đèn xe đêm, pháo hoa, vệt sao</string>
+    <string name="mode_vanish">Biến mất</string>
+    <string name="mode_vanish_desc">Xóa người và xe cộ đang di chuyển bằng thuật toán trung vị theo thời gian</string>
+
+    <!-- Stability -->
+    <string name="stability_stable">ỔN ĐỊNH</string>
+    <string name="stability_shaky">RUNG LẮC</string>
+    <string name="tripod_hint">Phát hiện chân máy: Bỏ qua căn chỉnh để tiết kiệm pin</string>
+    <string name="handheld_hint">Cầm tay: Tính năng tự động căn chỉnh khung hình đang bật</string>
+
+    <!-- Durations -->
+    <string name="duration_3s">3 giây</string>
+    <string name="duration_5s">5 giây</string>
+    <string name="duration_9s">9 giây</string>
+    <string name="duration_15s">15 giây</string>
+    <string name="duration_30s">30 giây</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Processing -->
+    <string name="capturing">Đang chụp liên tiếp…</string>
+    <string name="aligning">Đang căn chỉnh khung hình AI…</string>
+    <string name="blending">Đang trộn ảnh phơi sáng dài…</string>
+    <string name="canceling">Đang hủy bỏ…</string>
+
+    <!-- Result Screen -->
+    <string name="result_title">Kết quả Phơi sáng dài</string>
+    <string name="action_save">Lưu lại</string>
+    <string name="action_share">Chia sẻ</string>
+    <string name="action_share_video">Chia sẻ Video</string>
+    <string name="action_export_wallpaper">Hình nền</string>
+    <string name="wallpaper_saved">Đã lưu video lặp hình nền vào bộ sưu tập!</string>
+    <string name="wallpaper_failed">Lỗi khi xuất video hình nền</string>
+    <string name="action_discard">Bỏ qua</string>
+    <string name="action_pick_as_cover">Chọn làm kết quả</string>
+    <string name="label_scrub_frames">Tua khung hình chuỗi chụp</string>
+    <string name="label_composite_result">Ảnh phơi sáng tổng hợp</string>
+    <string name="label_composite_active">Đang chọn ảnh tổng hợp</string>
+    <string name="label_frame_index">Khung hình %1$d / %2$d</string>
+    <string name="save_success">Đã lưu ảnh vào thư viện thành công!</string>
+    <string name="save_failed">Lỗi khi lưu ảnh</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="setting_grid">Lưới tỷ lệ vàng 3x3</string>
+    <string name="setting_haptics">Rung phản hồi</string>
+    <string name="setting_companion_video">Lưu Video kèm theo</string>
+    <string name="setting_companion_video_desc">Lưu video MP4 để tua chọn khung hình khác và chia sẻ</string>
+    <string name="setting_resolution">Độ phân giải ảnh ra</string>
+    <string name="resolution_high">Cao (Độ phân giải gốc)</string>
+    <string name="resolution_balanced">Cân bằng (1080p)</string>
+    <string name="setting_language">Ngôn ngữ</string>
+    <string name="setting_app_icon">Giao diện biểu tượng</string>
+    <string name="setting_pro_status">Mở khóa SpectreFlow Pro</string>
+    <string name="setting_pro_desc">Mở khóa thời gian phơi sáng 15s, 30s và biểu tượng Pro</string>
+    <string name="hint_press_hold">Nhấn &amp; giữ để phơi sáng</string>
+    <string name="hint_release_to_capture">Thả tay để chụp • Tối đa %ds</string>
+    <string name="hint_hold_longer">Giữ lâu hơn để chụp (tối thiểu 1 giây)</string>
+    <string name="hint_pro_required">Cần SpectreFlow Pro cho phơi sáng %ds</string>
+    <string name="limited_access_hint">Quyền ảnh giới hạn: ảnh và video vẫn được lưu trực tiếp vào bộ sưu tập</string>
+    <string name="action_view_tutorial">Xem hướng dẫn sử dụng</string>
+
+    <!-- Onboarding -->
+    <string name="action_skip">Bỏ qua</string>
+    <string name="action_next">Tiếp tục</string>
+    <string name="onboarding_get_started">Bắt đầu ngay</string>
+    <string name="onboarding_step1_title">Nhấn &amp; Giữ để Chụp</string>
+    <string name="onboarding_step1_subtitle">Thả tay để kết thúc phơi sáng dài</string>
+    <string name="onboarding_step1_bullet1">Nhấn và giữ nút chụp để bắt đầu chuỗi khung hình liên tiếp.</string>
+    <string name="onboarding_step1_bullet2">Cảm biến sẽ tự động khóa sáng, lấy nét và cân bằng trắng ngay tức thì.</string>
+    <string name="onboarding_step1_bullet3">Thả tay bất cứ khi nào sau 1 giây để tổng hợp thành một bức ảnh hoàn chỉnh.</string>
+    <string name="onboarding_step2_title">Chân máy &amp; Cầm tay</string>
+    <string name="onboarding_step2_subtitle">Cảm biến con quay hồi chuyển 6 trục</string>
+    <string name="onboarding_step2_bullet1">Huy hiệu ỔN ĐỊNH: Bỏ qua căn chỉnh để tối ưu hóa thời lượng pin.</string>
+    <string name="onboarding_step2_bullet2">Huy hiệu RUNG LẮC: Bật thuật toán AI căn chỉnh bù trừ chuyển động tay.</string>
+    <string name="onboarding_step2_bullet3">Viền ảnh được xén thông minh giữ các chi tiết tĩnh sắc nét tối đa.</string>
+    <string name="onboarding_step3_title">Chế độ AI Thông minh</string>
+    <string name="onboarding_step3_subtitle">Phân tích bối cảnh tự động &amp; Tùy chỉnh</string>
+    <string name="onboarding_step3_bullet1">Chế độ Tự động phân tích ánh sáng và chuyển động để chọn chế độ tối ưu.</string>
+    <string name="onboarding_step3_bullet2">Làm mờ chuyển động: Nước chảy mượt như lụa, mây trôi bồng bềnh.</string>
+    <string name="onboarding_step3_bullet3">Vệt sáng chụp đèn xe đêm; Biến mất để xóa người và xe cộ.</string>
+
+    <!-- Permissions -->
+    <string name="permission_camera_title">Cần cấp quyền Camera</string>
+    <string name="permission_camera_desc">SpectreFlow cần truy cập máy ảnh để chụp chuỗi khung hình liên tiếp cho quá trình phơi sáng dài.</string>
+    <string name="permission_grant">Cấp quyền</string>
+</resources>
