@@ -72,13 +72,13 @@ fun RingShutterButton(
                 else
                     "Shutter button. Press and hold to expose, release to capture"
             }
-            .pointerInput(enabled, isCapturing) {
+            .pointerInput(enabled) {
                 if (!enabled) return@pointerInput
                 awaitPointerEventScope {
                     while (true) {
                         val down = awaitFirstDown(requireUnconsumed = false)
-                        val center = Offset(this.size.width / 2f, this.size.height / 2f)
-                        val cancelDistance = this.size.width * 1.4f
+                        val center = Offset(size.width / 2f, size.height / 2f)
+                        val cancelDistance = size.width * 1.5f
                         onPressStart()
 
                         var isCancelled = false

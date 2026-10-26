@@ -75,7 +75,11 @@ public final class CameraService: NSObject, ObservableObject, AVCaptureVideoData
 
     private func setupCamera(position: AVCaptureDevice.Position) {
         captureSession.beginConfiguration()
-        captureSession.sessionPreset = .photo
+        if captureSession.canSetSessionPreset(.hd1920x1080) {
+            captureSession.sessionPreset = .hd1920x1080
+        } else {
+            captureSession.sessionPreset = .photo
+        }
 
         // Remove existing input
         if let currentInput = videoInput {

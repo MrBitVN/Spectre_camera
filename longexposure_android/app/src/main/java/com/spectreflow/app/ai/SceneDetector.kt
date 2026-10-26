@@ -82,11 +82,9 @@ class HeuristicSceneDetector : SceneDetector {
             stats.averageLuminance < 0.38f && stats.highlightRatio > 0.005f && stats.motionScore > 0.02f ->
                 LongExposureMode.LIGHT_TRAILS
 
-            // Bright daytime scene with significant motion (pedestrians, moving cars) -> Vanish
-            stats.averageLuminance >= 0.35f && stats.motionScore > 0.08f ->
-                LongExposureMode.VANISH
-
-            // Low or fluid motion (water, clouds, mist) or generic scene -> Motion Blur
+            // In daytime scenes with motion (cars, water, pedestrians, clouds), default to Motion Blur (mean)
+            // to produce smooth silky blurred streaks while keeping static scenery sharp.
+            // Vanish mode is reserved for explicit manual selection by the user.
             else ->
                 LongExposureMode.MOTION_BLUR
         }

@@ -101,4 +101,61 @@ final class BlendingMathTests: XCTestCase {
         XCTAssertEqual((p2 >> 8) & 0xFF, 45)
         XCTAssertEqual((p2 >> 16) & 0xFF, 45)
     }
+
+    /// Step 3 verification:
+    /// Feeds synthetic burst frames with static background (bridge/buildings)
+    /// and a moving bright square (moving car) across 30 frames.
+    /// Asserts static background is completely unchanged and moving square blurs into a smooth streak.
+    func testSyntheticMovingSquareMotionBlur() {
+        let width = 100
+        let height = 100
+        let numFrames = 30
+        let motionBlender = MeanBlender(width: width, height: height)
+        let vanishBlender = MedianBlender(width: width, height: height, maxReservoirFrames: numFrames)
+
+        let bgR: UInt8 = 80
+        let bgG: UInt8 = 90
+        let bgB: UInt8 = 100
+        let carR: UInt8 = 250
+        let carG: UInt8 = 240
+        let carB: UInt8 = 220
+
+        for f in 0..<numFrames {
+            var frame = [UInt32](repeating: makeRGBA(r: bgR, g: bgG, b: bgB), count: width * height)
+            let carStartX = 10 + f * 2
+            let carEndX = carStartX + 10
+
+            for y in 40..<50 {
+                for x in carStartX..<carEndX {
+                    if x < width {
+                        frame[y * width + x] = makeRGBA(r: carR, g: carG, b: carB)
+                    }
+                }
+            }
+
+            motionBlender.addFrame(rgbaPixels: frame)
+            vanishBlender.addDirectFrame(rgbaPixels: frame)
+        }
+
+        XCTAssertEqual(motionBlender.frameCount, numFrames)
+
+        let motionResult = motionBlender.finalizeOutput()
+        let vanishResult = vanishBlender.finalizeOutput()
+
+        // 1. Static background: pixel at (10, 10) untouched by car
+        let staticPixel = motionResult[10 * width + 10]
+        XCTAssertEqual(staticPixel & 0xFF, bgR)
+        XCTAssertEqual((staticPixel >> 8) & 0xFF, bgG)
+        XCTAssertEqual((staticPixel >> 16) & 0xFF, bgB)
+
+        // 2. Motion blur streak: pixel at (30, 45) traversed by moving car
+        let streakPixel = motionResult[45 * width + 30]
+        let streakR = streakPixel & 0xFF
+        XCTAssertTrue(streakR > bgR, "Streak must be brighter than static background")
+        XCTAssertTrue(streakR < carR, "Streak must be smooth and dimmer than peak car")
+
+        // 3. Vanish mode removes car completely back to background
+        let vanishPixel = vanishResult[45 * width + 30]
+        XCTAssertEqual(vanishPixel & 0xFF, bgR)
+    }
 }

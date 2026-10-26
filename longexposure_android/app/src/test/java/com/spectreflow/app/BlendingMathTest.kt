@@ -126,4 +126,96 @@ class BlendingMathTest {
         assertEquals("Tourist in G should vanish", 40, g)
         assertEquals("Tourist in B should vanish", 40, b)
     }
+
+    /**
+     * Step 3 verification:
+     * Feeds synthetic burst frames with a static background (bridge/buildings)
+     * and a moving bright square (car headlights/body) across 30 frames.
+     * Asserts:
+     * 1. Static background pixels outside the movement path are completely unchanged and sharp.
+     * 2. The moving square turns into a smooth continuous streak with mathematically exact intermediate values.
+     * 3. Vanish mode removes the moving square, whereas Motion Blur blurs it into a streak.
+     */
+    @Test
+    fun testSyntheticMovingSquareMotionBlur() {
+        val width = 100
+        val height = 100
+        val numFrames = 30
+        val motionBlender = MeanBlender(width, height)
+        val vanishBlender = MedianBlender(width, height, maxReservoirFrames = numFrames)
+
+        fun argb(r: Int, g: Int, b: Int): Int =
+            (0xFF shl 24) or (r shl 16) or (g shl 8) or b
+
+        val bgR = 80
+        val bgG = 90
+        val bgB = 100
+        val carR = 250
+        val carG = 240
+        val carB = 220
+
+        // Square size: 10x10, moves horizontally from x=10 to x=68 (2 pixels per frame)
+        // along y range 40..49
+        for (f in 0 until numFrames) {
+            val frame = IntArray(width * height) { argb(bgR, bgG, bgB) }
+            val carStartX = 10 + f * 2
+            val carEndX = carStartX + 10
+
+            for (y in 40 until 50) {
+                for (x in carStartX until carEndX) {
+                    if (x in 0 until width) {
+                        frame[y * width + x] = argb(carR, carG, carB)
+                    }
+                }
+            }
+
+            motionBlender.addFrame(frame)
+            vanishBlender.addDirectFrame(frame)
+        }
+
+        assertEquals(numFrames, motionBlender.frameCount)
+
+        val motionResult = motionBlender.finalizeOutput()
+        val vanishResult = vanishBlender.finalizeOutput()
+
+        // 1. Static background verification: pixel at (10, 10) was never touched by the car
+        val staticPixel = motionResult[10 * width + 10]
+        val sR = (staticPixel shr 16) and 0xFF
+        val sG = (staticPixel shr 8) and 0xFF
+        val sB = staticPixel and 0xFF
+        assertEquals("Static background R must stay sharp and unchanged", bgR, sR)
+        assertEquals("Static background G must stay sharp and unchanged", bgG, sG)
+        assertEquals("Static background B must stay sharp and unchanged", bgB, sB)
+
+        // 2. Motion blur streak verification: pixel at (30, 45) was traversed by the moving car
+        // The square occupied x in [30-9, 30] = [21, 30] for several frames out of 30.
+        // It must be strictly brighter than background (80) and strictly dimmer than pure car (250).
+        val streakPixel = motionResult[45 * width + 30]
+        val streakR = (streakPixel shr 16) and 0xFF
+        org.junit.Assert.assertTrue(
+            "Motion blur streak must be brighter than static background ($bgR), actual=$streakR",
+            streakR > bgR
+        )
+        org.junit.Assert.assertTrue(
+            "Motion blur streak must be smoothly blended and lower than peak car ($carR), actual=$streakR",
+            streakR < carR
+        )
+
+        // 3. Smoothness check: adjacent pixels along the trajectory must transition smoothly without gaps
+        var prevR = (motionResult[45 * width + 20] shr 16) and 0xFF
+        for (x in 21..60) {
+            val currR = (motionResult[45 * width + x] shr 16) and 0xFF
+            val delta = kotlin.math.abs(currR - prevR)
+            org.junit.Assert.assertTrue(
+                "Motion blur streak gradient must be smooth without jump cuts (delta=$delta at x=$x)",
+                delta <= 25
+            )
+            prevR = currR
+        }
+
+        // 4. Contrast with Vanish mode: Vanish mode should remove the moving car completely
+        val vanishStreakPixel = vanishResult[45 * width + 30]
+        val vR = (vanishStreakPixel shr 16) and 0xFF
+        assertEquals("Vanish mode must remove the car back to background luminance", bgR, vR)
+    }
 }

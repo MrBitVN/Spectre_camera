@@ -107,6 +107,9 @@ class FrameAligner(
         val scaled = Bitmap.createScaledBitmap(bitmap, dsWidth, dsHeight, true)
         val pixels = IntArray(dsWidth * dsHeight)
         scaled.getPixels(pixels, 0, dsWidth, 0, 0, dsWidth, dsHeight)
+        if (scaled != bitmap) {
+            scaled.recycle()
+        }
 
         val lum = ByteArray(pixels.size)
         for (i in pixels.indices) {

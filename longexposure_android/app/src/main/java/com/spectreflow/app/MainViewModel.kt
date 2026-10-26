@@ -24,12 +24,23 @@ import com.spectreflow.app.settings.CaptureDuration
 import com.spectreflow.app.storage.MediaSaver
 import com.spectreflow.app.video.CompanionVideoRecorder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.concurrent.atomic.AtomicReference
+
+enum class CaptureState {
+    IDLE,
+    CAPTURING,
+    PROCESSING,
+    RESULT,
+    ERROR
+}
 
 enum class AppScreen {
     CAMERA,
@@ -75,6 +86,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var tempVideoFile: File? = null
     private val burstKeyframes = mutableListOf<Bitmap>()
     private var effectiveModeAtCapture: LongExposureMode = LongExposureMode.MOTION_BLUR
+
+    private val captureState = AtomicReference(CaptureState.IDLE)
+    private var frameChannel: Channel<Bitmap>? = null
+    private var frameConsumerJob: Job? = null
 
     private val initialSettings = settingsManager.loadSettings()
     private val _uiState = MutableStateFlow(
@@ -142,10 +157,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onStartBurstCapture(): Boolean {
-        if (_uiState.value.isCapturing) return false
+        if (!captureState.compareAndSet(CaptureState.IDLE, CaptureState.CAPTURING)) {
+            return false
+        }
 
         val duration = _uiState.value.selectedDuration
         if (duration.isProOnly && !_uiState.value.settings.isProUnlocked) {
+            captureState.set(CaptureState.IDLE)
             _uiState.value = _uiState.value.copy(
                 hintMessage = "SpectreFlow Pro required for ${duration.seconds}s exposure"
             )
@@ -153,10 +171,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         triggerHaptic()
-        isFirstFrame = true
-        frameAligner = null
-        blenderEngine.reset()
-        burstKeyframes.clear()
+        cleanupCapture()
+        captureState.set(CaptureState.CAPTURING)
 
         // Resolve active mode (Auto picks detected scene mode)
         effectiveModeAtCapture = if (_uiState.value.selectedMode == LongExposureMode.AUTO) {
@@ -173,6 +189,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             tempVideoFile = null
         }
 
+        startFrameConsumer()
+
         _uiState.value = _uiState.value.copy(
             isCapturing = true,
             captureProgress = 0f,
@@ -183,37 +201,73 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return true
     }
 
-    fun onFrameCaptured(bitmap: Bitmap) {
-        if (!_uiState.value.isCapturing) return
+    private fun startFrameConsumer() {
+        val channel = Channel<Bitmap>(capacity = Channel.CONFLATED)
+        frameChannel = channel
 
-        viewModelScope.launch(Dispatchers.Default) {
-            val width = bitmap.width
-            val height = bitmap.height
-
-            if (isFirstFrame) {
-                blenderEngine.start(effectiveModeAtCapture, width, height)
-                frameAligner = FrameAligner(width, height)
-
-                tempVideoFile?.let { file ->
-                    videoRecorder?.start(file, width, height)
+        frameConsumerJob = viewModelScope.launch(Dispatchers.Default) {
+            for (bitmap in channel) {
+                if (captureState.get() != CaptureState.CAPTURING) {
+                    bitmap.recycle()
+                    continue
                 }
-                isFirstFrame = false
+
+                try {
+                    val width = bitmap.width
+                    val height = bitmap.height
+
+                    if (isFirstFrame) {
+                        blenderEngine.start(effectiveModeAtCapture, width, height)
+                        frameAligner = FrameAligner(width, height)
+
+                        tempVideoFile?.let { file ->
+                            videoRecorder?.start(file, width, height)
+                        }
+                        isFirstFrame = false
+                    }
+
+                    val isTripod = stabilityState.value == StabilityState.STABLE
+                    val alignment = frameAligner?.alignFrame(bitmap, isTripod)
+                    val alignedBitmap = alignment?.alignedBitmap ?: bitmap
+
+                    blenderEngine.addFrame(alignedBitmap)
+                    videoRecorder?.addFrame(alignedBitmap)
+
+                    // Keyframe preview cache (up to 16 frames max, downsampled to 360px wide to save RAM)
+                    if (burstKeyframes.size < 16) {
+                        val thumbW = 360
+                        val thumbH = (360f * height / width).toInt().coerceAtLeast(1)
+                        val thumb = Bitmap.createScaledBitmap(alignedBitmap, thumbW, thumbH, false)
+                        burstKeyframes.add(thumb)
+                    }
+
+                    if (alignedBitmap != bitmap) {
+                        alignedBitmap.recycle()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    bitmap.recycle()
+                }
             }
+        }
+    }
 
-            val isTripod = stabilityState.value == StabilityState.STABLE
-            val alignment = frameAligner?.alignFrame(bitmap, isTripod)
-            val alignedBitmap = alignment?.alignedBitmap ?: bitmap
+    fun onFrameCaptured(bitmap: Bitmap) {
+        if (captureState.get() != CaptureState.CAPTURING) {
+            bitmap.recycle()
+            return
+        }
 
-            blenderEngine.addFrame(alignedBitmap)
-            videoRecorder?.addFrame(alignedBitmap)
+        val channel = frameChannel
+        if (channel == null || channel.isClosedForSend) {
+            bitmap.recycle()
+            return
+        }
 
-            // Cache keyframes for scrubbing review (up to 16 frames max to bound memory)
-            if (burstKeyframes.size < 16) {
-                val thumbWidth = 720
-                val thumbHeight = (720f * height / width).toInt()
-                val thumb = Bitmap.createScaledBitmap(alignedBitmap, thumbWidth, thumbHeight, true)
-                burstKeyframes.add(thumb)
-            }
+        val result = channel.trySend(bitmap)
+        if (!result.isSuccess) {
+            bitmap.recycle()
         }
     }
 
@@ -225,33 +279,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onShutterReleased(elapsedMs: Long) {
-        if (!_uiState.value.isCapturing) return
+        if (!captureState.compareAndSet(CaptureState.CAPTURING, CaptureState.PROCESSING)) {
+            return
+        }
+
+        frameChannel?.close()
 
         if (elapsedMs < 1000L) {
             // Released earlier than minimum 1 second hold time -> discard
-            blenderEngine.reset()
-            frameAligner?.reset()
-            frameAligner = null
-            videoRecorder?.cancel()
-            videoRecorder = null
-            tempVideoFile = null
-            burstKeyframes.clear()
-            isFirstFrame = true
+            cleanupCapture()
+            captureState.set(CaptureState.IDLE)
 
             _uiState.value = _uiState.value.copy(
                 isCapturing = false,
                 captureProgress = 0f,
                 elapsedSeconds = 0f,
+                currentScreen = AppScreen.CAMERA,
                 hintMessage = "Hold longer to capture (min 1s)"
             )
         } else {
-            // Valid capture duration -> finalize long exposure
-            onBurstCompleted()
+            finalizeCapture()
         }
     }
 
     fun onBurstCompleted() {
-        if (!_uiState.value.isCapturing && _uiState.value.currentScreen == AppScreen.PROCESSING) return
+        if (!captureState.compareAndSet(CaptureState.CAPTURING, CaptureState.PROCESSING)) {
+            return
+        }
+        frameChannel?.close()
+        finalizeCapture()
+    }
+
+    private fun finalizeCapture() {
         triggerHaptic()
         _uiState.value = _uiState.value.copy(
             isCapturing = false,
@@ -262,45 +321,77 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
 
         viewModelScope.launch(Dispatchers.Default) {
-            val cropRect = frameAligner?.cropBounds
-            val finalBitmap = blenderEngine.finalizeResult(cropRect)
+            try {
+                // Wait for any in-flight frame to complete
+                frameConsumerJob?.join()
 
-            val finalizedVideoFile = videoRecorder?.finish()
-            videoRecorder = null
+                val cropRect = frameAligner?.cropBounds
+                val finalBitmap = blenderEngine.finalizeResult(cropRect)
 
-            var videoUri: Uri? = null
-            if (finalizedVideoFile != null && finalizedVideoFile.exists()) {
-                val saveResult = mediaSaver.saveVideoToGallery(finalizedVideoFile)
-                videoUri = saveResult.getOrNull()
+                val finalizedVideoFile = videoRecorder?.finish()
+                videoRecorder = null
+
+                var videoUri: Uri? = null
+                if (finalizedVideoFile != null && finalizedVideoFile.exists()) {
+                    val saveResult = mediaSaver.saveVideoToGallery(finalizedVideoFile)
+                    videoUri = saveResult.getOrNull()
+                }
+
+                _uiState.value = _uiState.value.copy(
+                    currentScreen = AppScreen.RESULT,
+                    resultBitmap = finalBitmap,
+                    keyframes = burstKeyframes.toList(),
+                    companionVideoUri = videoUri,
+                    companionVideoFile = finalizedVideoFile,
+                    processingProgress = 1f
+                )
+                captureState.set(CaptureState.RESULT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                cleanupCapture()
+                captureState.set(CaptureState.ERROR)
+                _uiState.value = _uiState.value.copy(
+                    currentScreen = AppScreen.CAMERA,
+                    isCapturing = false,
+                    hintMessage = "Processing failed: ${e.localizedMessage ?: "Unknown error"}"
+                )
             }
-
-            _uiState.value = _uiState.value.copy(
-                currentScreen = AppScreen.RESULT,
-                resultBitmap = finalBitmap,
-                keyframes = burstKeyframes.toList(),
-                companionVideoUri = videoUri,
-                companionVideoFile = finalizedVideoFile,
-                processingProgress = 1f
-            )
         }
     }
 
-    fun onCancelCapture() {
+    private fun cleanupCapture() {
+        frameChannel?.close()
+        frameConsumerJob?.cancel()
+        frameConsumerJob = null
+        frameChannel = null
         blenderEngine.reset()
         frameAligner?.reset()
         frameAligner = null
         videoRecorder?.cancel()
         videoRecorder = null
+        tempVideoFile?.delete()
         tempVideoFile = null
         burstKeyframes.clear()
         isFirstFrame = true
+    }
 
-        _uiState.value = _uiState.value.copy(
-            isCapturing = false,
-            captureProgress = 0f,
-            elapsedSeconds = 0f,
-            currentScreen = AppScreen.CAMERA
-        )
+    fun onCancelCapture() {
+        if (captureState.get() == CaptureState.CAPTURING || captureState.get() == CaptureState.PROCESSING) {
+            cleanupCapture()
+            captureState.set(CaptureState.IDLE)
+            _uiState.value = _uiState.value.copy(
+                isCapturing = false,
+                captureProgress = 0f,
+                elapsedSeconds = 0f,
+                currentScreen = AppScreen.CAMERA
+            )
+        }
+    }
+
+    fun onAppBackgrounded() {
+        if (captureState.get() == CaptureState.CAPTURING) {
+            onCancelCapture()
+        }
     }
 
     fun clearHintMessage() {
@@ -357,8 +448,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onDiscardResult() {
-        blenderEngine.reset()
-        burstKeyframes.clear()
+        cleanupCapture()
+        captureState.set(CaptureState.IDLE)
         _uiState.value = _uiState.value.copy(
             resultBitmap = null,
             keyframes = emptyList(),
@@ -395,12 +486,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         settingsManager.saveSettings(newSettings)
         billingService.setProUnlocked(newSettings.isProUnlocked)
         _uiState.value = _uiState.value.copy(settings = newSettings)
-    }
-
-    fun onAppBackgrounded() {
-        if (_uiState.value.isCapturing) {
-            onCancelCapture()
-        }
     }
 
     private fun triggerHaptic() {

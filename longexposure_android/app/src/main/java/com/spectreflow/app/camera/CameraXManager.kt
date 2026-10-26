@@ -95,6 +95,7 @@ class CameraXManager(private val context: Context) {
         imageAnalysis = ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .setTargetResolution(android.util.Size(1920, 1080))
             .build()
             .also { analysis ->
                 analysis.setAnalyzer(cameraExecutor) { imageProxy ->
@@ -135,8 +136,12 @@ class CameraXManager(private val context: Context) {
             if (now - lastPreviewAnalysisMs > 350L && onPreviewFrameAvailable != null) {
                 lastPreviewAnalysisMs = now
                 try {
-                    val bitmap = imageProxy.toBitmap()
-                    onPreviewFrameAvailable?.invoke(bitmap)
+                    val rawBitmap = imageProxy.toBitmap()
+                    val thumb = Bitmap.createScaledBitmap(rawBitmap, 160, 120, false)
+                    if (thumb != rawBitmap) {
+                        rawBitmap.recycle()
+                    }
+                    onPreviewFrameAvailable?.invoke(thumb)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -146,16 +151,34 @@ class CameraXManager(private val context: Context) {
         }
 
         try {
-            val bitmap = imageProxy.toBitmap()
+            val rawBitmap = imageProxy.toBitmap()
             val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-            val rotatedBitmap = if (rotationDegrees != 0) {
-                val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
-                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-            } else {
-                bitmap
+
+            val maxWorkingDim = 1920
+            val srcW = rawBitmap.width
+            val srcH = rawBitmap.height
+            val maxEdge = maxOf(srcW, srcH)
+            val scale = if (maxEdge > maxWorkingDim) maxWorkingDim.toFloat() / maxEdge else 1.0f
+
+            val matrix = Matrix()
+            if (scale < 1.0f) {
+                matrix.postScale(scale, scale)
+            }
+            if (rotationDegrees != 0) {
+                matrix.postRotate(rotationDegrees.toFloat())
             }
 
-            onFrameAvailable?.invoke(rotatedBitmap)
+            val finalBitmap = if (!matrix.isIdentity) {
+                val rotated = Bitmap.createBitmap(rawBitmap, 0, 0, srcW, srcH, matrix, true)
+                if (rotated != rawBitmap) {
+                    rawBitmap.recycle()
+                }
+                rotated
+            } else {
+                rawBitmap
+            }
+
+            onFrameAvailable?.invoke(finalBitmap)
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

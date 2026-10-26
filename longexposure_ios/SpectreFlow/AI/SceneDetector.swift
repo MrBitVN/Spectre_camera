@@ -94,11 +94,8 @@ public final class HeuristicSceneDetector: SceneDetectorProtocol {
         if stats.averageLuminance < 0.38 && stats.highlightRatio > 0.005 && stats.motionScore > 0.02 {
             return .lightTrails
         }
-        // Bright scene with heavy motion -> Vanish
-        if stats.averageLuminance >= 0.35 && stats.motionScore > 0.08 {
-            return .vanish
-        }
-        // Gentle or generic motion -> Motion Blur
+        // In daytime scenes with traffic or motion, default to Motion Blur (mean)
+        // so cars turn into smooth silky streaks while background remains sharp.
         return .motionBlur
     }
 

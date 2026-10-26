@@ -10,6 +10,14 @@ public enum ScreenState {
     case result
 }
 
+public enum CaptureState {
+    case idle
+    case capturing
+    case processing
+    case result
+    case error
+}
+
 @MainActor
 public final class CameraViewModel: ObservableObject {
     public let cameraService = CameraService()
@@ -18,7 +26,9 @@ public final class CameraViewModel: ObservableObject {
     private let blenderEngine = FrameBlenderEngine()
     private let sceneDetector = HeuristicSceneDetector()
     private let videoWriter = CompanionVideoWriter()
+    private let frameProcessingQueue = DispatchQueue(label: "com.spectreflow.frameProcessingQueue", qos: .userInitiated)
 
+    public private(set) var captureState: CaptureState = .idle
     @Published public var screenState: ScreenState = .camera
     @Published public var selectedMode: LongExposureMode = .auto
     @Published public var detectedMode: LongExposureMode = .motionBlur
@@ -131,13 +141,14 @@ public final class CameraViewModel: ObservableObject {
     }
 
     public func shutterPressed() {
-        if cameraService.isCapturing { return }
+        guard captureState == .idle else { return }
 
         if selectedDuration.isProOnly && !proManager.isProUnlocked {
             hintMessage = String(format: NSLocalizedString("hint_pro_required", comment: ""), selectedDuration.rawValue)
             return
         }
 
+        captureState = .capturing
         triggerHaptic()
         isFirstFrame = true
         frameAligner = nil
@@ -154,19 +165,15 @@ public final class CameraViewModel: ObservableObject {
     }
 
     public func shutterReleased() {
-        guard cameraService.isCapturing else { return }
+        guard captureState == .capturing else { return }
+        captureState = .processing
 
         let elapsedMs = cameraService.stopBurst()
         if elapsedMs < 1000 {
             // Held less than minimum 1 second -> discard
-            videoWriter.cancel()
-            burstKeyframes.removeAll()
-            Task {
-                await blenderEngine.reset()
-            }
-            frameAligner?.reset()
-            frameAligner = nil
-            isFirstFrame = true
+            cleanupCapture()
+            captureState = .idle
+            screenState = .camera
             hintMessage = NSLocalizedString("hint_hold_longer", comment: "")
         } else {
             handleBurstCompleted()
@@ -178,15 +185,22 @@ public final class CameraViewModel: ObservableObject {
     }
 
     public func cancelCapture() {
+        guard captureState == .capturing || captureState == .processing else { return }
         cameraService.cancelBurst()
+        cleanupCapture()
+        captureState = .idle
+        screenState = .camera
+    }
+
+    private func cleanupCapture() {
         videoWriter.cancel()
         burstKeyframes.removeAll()
+        frameAligner?.reset()
+        frameAligner = nil
+        isFirstFrame = true
         Task {
             await blenderEngine.reset()
         }
-        frameAligner?.reset()
-        frameAligner = nil
-        screenState = .camera
     }
 
     public func clearHintMessage() {
@@ -194,34 +208,41 @@ public final class CameraViewModel: ObservableObject {
     }
 
     private func handleCapturedFrame(image: UIImage, pixelBuffer: CVPixelBuffer) {
-        let width = image.size.width
-        let height = image.size.height
+        guard captureState == .capturing else { return }
 
-        Task {
-            if isFirstFrame {
-                await blenderEngine.start(mode: effectiveModeAtCapture, width: Int(width), height: Int(height))
-                frameAligner = FrameAligner(baseWidth: width, baseHeight: height)
+        frameProcessingQueue.async { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                guard self.captureState == .capturing else { return }
 
-                if settings.saveCompanionVideo {
-                    let tempURL = FileManager.default.temporaryDirectory
-                        .appendingPathComponent("spectreflow_\(Int(Date().timeIntervalSince1970)).mov")
-                    try? videoWriter.startWriting(outputURL: tempURL, width: Int(width), height: Int(height))
+                let width = image.size.width
+                let height = image.size.height
+
+                if self.isFirstFrame {
+                    await self.blenderEngine.start(mode: self.effectiveModeAtCapture, width: Int(width), height: Int(height))
+                    self.frameAligner = FrameAligner(baseWidth: width, baseHeight: height)
+
+                    if self.settings.saveCompanionVideo {
+                        let tempURL = FileManager.default.temporaryDirectory
+                            .appendingPathComponent("spectreflow_\(Int(Date().timeIntervalSince1970)).mov")
+                        try? self.videoWriter.startWriting(outputURL: tempURL, width: Int(width), height: Int(height))
+                    }
+                    self.isFirstFrame = false
                 }
-                isFirstFrame = false
-            }
 
-            let isTripod = stabilityDetector.stabilityState == .stable
-            let alignment = frameAligner?.align(image: image, pixelBuffer: pixelBuffer, isStableTripod: isTripod)
-            let frameToBlend = alignment?.alignedImage ?? image
+                let isTripod = self.stabilityDetector.stabilityState == .stable
+                let alignment = self.frameAligner?.align(image: image, pixelBuffer: pixelBuffer, isStableTripod: isTripod)
+                let frameToBlend = alignment?.alignedImage ?? image
 
-            _ = await blenderEngine.addFrame(image: frameToBlend)
+                _ = await self.blenderEngine.addFrame(image: frameToBlend)
 
-            if settings.saveCompanionVideo {
-                videoWriter.appendPixelBuffer(pixelBuffer)
-            }
+                if self.settings.saveCompanionVideo {
+                    self.videoWriter.appendPixelBuffer(pixelBuffer)
+                }
 
-            if burstKeyframes.count < 16 {
-                burstKeyframes.append(frameToBlend)
+                if self.burstKeyframes.count < 16 {
+                    self.burstKeyframes.append(frameToBlend)
+                }
             }
         }
     }
@@ -233,6 +254,21 @@ public final class CameraViewModel: ObservableObject {
         processingProgress = 0.5
 
         Task {
+            let crop = frameAligner?.cropBounds
+            let finalImage = await blenderEngine.finalizeResult(cropBounds: crop)
+
+            var videoURL: URL? = nil
+            if settings.saveCompanionVideo {
+                videoURL = await videoWriter.finishWriting()
+            }
+
+            self.companionVideoURL = videoURL
+            self.resultImage = finalImage
+            self.processingProgress = 1.0
+            self.screenState = .result
+            self.captureState = .result
+        }
+    }
             let crop = frameAligner?.cropBounds
             let finalImage = await blenderEngine.finalizeResult(cropBounds: crop)
 
@@ -296,9 +332,8 @@ public final class CameraViewModel: ObservableObject {
     }
 
     public func discardResult() {
-        Task {
-            await blenderEngine.reset()
-        }
+        cleanupCapture()
+        captureState = .idle
         resultImage = nil
         burstKeyframes.removeAll()
         companionVideoURL = nil

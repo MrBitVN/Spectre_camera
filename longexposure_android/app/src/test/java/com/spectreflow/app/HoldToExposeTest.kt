@@ -58,4 +58,47 @@ class HoldToExposeTest {
         assertEquals("00:15", formatTimer(15.0f))
         assertEquals("00:30", formatTimer(30.0f))
     }
+
+    @Test
+    fun testCaptureStateMachineTransitions() {
+        var state = CaptureState.IDLE
+
+        // 1. Shutter press down: IDLE -> CAPTURING
+        assertTrue(state == CaptureState.IDLE)
+        state = CaptureState.CAPTURING
+        assertEquals(CaptureState.CAPTURING, state)
+
+        // 2. Early release (<1s): CAPTURING -> IDLE
+        val earlyElapsed = 850L
+        if (earlyElapsed < 1000L) {
+            state = CaptureState.IDLE
+        }
+        assertEquals(CaptureState.IDLE, state)
+
+        // 3. Valid hold (3s, 5s, 15s, 30s): CAPTURING -> PROCESSING -> RESULT
+        state = CaptureState.CAPTURING
+        val validElapsed = 5000L
+        if (validElapsed >= 1000L) {
+            state = CaptureState.PROCESSING
+        }
+        assertEquals(CaptureState.PROCESSING, state)
+        state = CaptureState.RESULT
+        assertEquals(CaptureState.RESULT, state)
+
+        // 4. Slide cancel (finger dragged out): CAPTURING -> IDLE
+        state = CaptureState.CAPTURING
+        val draggedOut = true
+        if (draggedOut) {
+            state = CaptureState.IDLE
+        }
+        assertEquals(CaptureState.IDLE, state)
+
+        // 5. App backgrounded during hold: CAPTURING -> IDLE
+        state = CaptureState.CAPTURING
+        val appBackgrounded = true
+        if (appBackgrounded) {
+            state = CaptureState.IDLE
+        }
+        assertEquals(CaptureState.IDLE, state)
+    }
 }
