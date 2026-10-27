@@ -1,6 +1,9 @@
 package com.spectreflow.app
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -9,14 +12,28 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +43,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
@@ -38,6 +60,7 @@ import com.spectreflow.app.ui.screens.PermissionRationaleDialog
 import com.spectreflow.app.ui.screens.ProcessingScreen
 import com.spectreflow.app.ui.screens.ResultScreen
 import com.spectreflow.app.ui.screens.SettingsScreen
+import com.spectreflow.app.ui.theme.AccentEmerald
 import com.spectreflow.app.ui.theme.BgObsidian
 import com.spectreflow.app.ui.theme.SpectreFlowTheme
 import java.io.File
@@ -60,6 +83,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Global crash logging and error dialog presentation
+        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Log.e("SpectreFlow_Crash", "CRASH in thread ${thread.name}: ${throwable.localizedMessage}", throwable)
+            val stackTrace = throwable.stackTraceToString()
+            runOnUiThread {
+                viewModel.showCrashDialog(
+                    title = "Đã xảy ra lỗi ứng dụng",
+                    message = "${throwable.javaClass.simpleName}: ${throwable.localizedMessage ?: "Lỗi ngoại lệ hệ thống"}",
+                    stackTrace = stackTrace
+                )
+            }
+        }
+
         // Enable Wide Color Gamut (Display P3) where supported
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.colorMode = ActivityInfo.COLOR_MODE_WIDE_COLOR_GAMUT
@@ -77,6 +114,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val uiState by viewModel.uiState.collectAsState()
                     val stability by viewModel.stabilityState.collectAsState()
+                    val crashInfo by viewModel.crashDialog.collectAsState()
                     var previewViewInstance by remember { mutableStateOf<PreviewView?>(null) }
 
                     // Apply localized language configuration if changed
@@ -136,18 +174,40 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onShutterPressStart = {
-                                    val started = viewModel.onStartBurstCapture()
-                                    if (started) {
-                                        cameraManager?.startBurst(uiState.selectedDuration.seconds)
+                                    try {
+                                        val started = viewModel.onStartBurstCapture()
+                                        if (started) {
+                                            cameraManager?.startBurst(uiState.selectedDuration.seconds)
+                                        }
+                                    } catch (t: Throwable) {
+                                        Log.e("MainActivity", "onShutterPressStart error", t)
+                                        viewModel.showCrashDialog(
+                                            title = "Lỗi khi bắt đầu phơi sáng",
+                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể khởi động luồng máy ảnh"}",
+                                            stackTrace = t.stackTraceToString()
+                                        )
                                     }
                                 },
                                 onShutterPressRelease = {
-                                    val elapsedMs = cameraManager?.stopBurst() ?: 0L
-                                    viewModel.onShutterReleased(elapsedMs)
+                                    try {
+                                        val elapsedMs = cameraManager?.stopBurst() ?: 0L
+                                        viewModel.onShutterReleased(elapsedMs)
+                                    } catch (t: Throwable) {
+                                        Log.e("MainActivity", "onShutterPressRelease error", t)
+                                        viewModel.showCrashDialog(
+                                            title = "Lỗi khi kết thúc phơi sáng",
+                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể dừng luồng chụp"}",
+                                            stackTrace = t.stackTraceToString()
+                                        )
+                                    }
                                 },
                                 onShutterPressCancel = {
-                                    cameraManager?.cancelBurst()
-                                    viewModel.onCancelCapture()
+                                    try {
+                                        cameraManager?.cancelBurst()
+                                        viewModel.onCancelCapture()
+                                    } catch (t: Throwable) {
+                                        Log.e("MainActivity", "onShutterPressCancel error", t)
+                                    }
                                 },
                                 onModeSelected = { viewModel.onModeSelected(it) },
                                 onDurationSelected = { viewModel.onDurationSelected(it) },
@@ -219,6 +279,76 @@ class MainActivity : ComponentActivity() {
                             onGrantClick = {
                                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                             }
+                        )
+                    }
+
+                    // Visible Error Dialog in Vietnamese with stack trace and copy button
+                    crashInfo?.let { info ->
+                        AlertDialog(
+                            onDismissRequest = { viewModel.dismissCrashDialog() },
+                            title = {
+                                Text(
+                                    text = info.title,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFFF5252),
+                                    fontSize = 18.sp
+                                )
+                            },
+                            text = {
+                                Column(
+                                    modifier = Modifier
+                                        .verticalScroll(rememberScrollState())
+                                        .padding(vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        text = info.message,
+                                        color = Color.White,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 14.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Text(
+                                        text = "Chi tiết ngăn xếp lỗi (Stack Trace):",
+                                        color = Color(0xFF90A4AE),
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    SelectionContainer {
+                                        Text(
+                                            text = info.stackTrace.take(1200),
+                                            color = Color(0xFFCFD8DC),
+                                            fontSize = 11.sp,
+                                            fontFamily = FontFamily.Monospace
+                                        )
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                        val clip = ClipData.newPlainText(
+                                            "SpectreFlow Error Log",
+                                            "${info.title}\n${info.message}\n\n${info.stackTrace}"
+                                        )
+                                        clipboard.setPrimaryClip(clip)
+                                        Toast.makeText(this@MainActivity, "Đã sao chép mã lỗi vào bộ nhớ tạm", Toast.LENGTH_SHORT).show()
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
+                                ) {
+                                    Text("Sao chép mã lỗi", color = BgObsidian, fontWeight = FontWeight.Bold)
+                                }
+                            },
+                            dismissButton = {
+                                OutlinedButton(
+                                    onClick = { viewModel.dismissCrashDialog() }
+                                ) {
+                                    Text("Đóng", color = Color.White)
+                                }
+                            },
+                            containerColor = Color(0xFF1E2228),
+                            shape = RoundedCornerShape(16.dp)
                         )
                     }
                 }

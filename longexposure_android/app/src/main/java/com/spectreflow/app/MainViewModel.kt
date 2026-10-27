@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.spectreflow.app.ai.HeuristicSceneDetector
@@ -74,6 +75,12 @@ data class UiState(
     val isLimitedAccess: Boolean = false
 )
 
+data class AppCrashInfo(
+    val title: String,
+    val message: String,
+    val stackTrace: String
+)
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     val settingsManager = AppSettingsManager(application)
     val billingService: BillingService = StubBillingService(settingsManager)
@@ -99,6 +106,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
     )
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    private val _crashDialog = MutableStateFlow<AppCrashInfo?>(null)
+    val crashDialog: StateFlow<AppCrashInfo?> = _crashDialog.asStateFlow()
 
     val stabilityState: StateFlow<StabilityState> = stabilityDetector.stabilityState
 
@@ -157,48 +167,60 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onStartBurstCapture(): Boolean {
-        if (!captureState.compareAndSet(CaptureState.IDLE, CaptureState.CAPTURING)) {
-            return false
-        }
+        try {
+            if (!captureState.compareAndSet(CaptureState.IDLE, CaptureState.CAPTURING)) {
+                return false
+            }
 
-        val duration = _uiState.value.selectedDuration
-        if (duration.isProOnly && !_uiState.value.settings.isProUnlocked) {
-            captureState.set(CaptureState.IDLE)
+            val duration = _uiState.value.selectedDuration
+            if (duration.isProOnly && !_uiState.value.settings.isProUnlocked) {
+                captureState.set(CaptureState.IDLE)
+                _uiState.value = _uiState.value.copy(
+                    hintMessage = "SpectreFlow Pro required for ${duration.seconds}s exposure"
+                )
+                return false
+            }
+
+            triggerHaptic()
+            cleanupCapture()
+            captureState.set(CaptureState.CAPTURING)
+
+            // Resolve active mode (Auto picks detected scene mode)
+            effectiveModeAtCapture = if (_uiState.value.selectedMode == LongExposureMode.AUTO) {
+                _uiState.value.detectedMode
+            } else {
+                _uiState.value.selectedMode
+            }
+
+            if (_uiState.value.settings.saveCompanionVideo) {
+                tempVideoFile = File(getApplication<Application>().cacheDir, "spectreflow_burst_${System.currentTimeMillis()}.mp4")
+                videoRecorder = CompanionVideoRecorder(getApplication())
+            } else {
+                videoRecorder = null
+                tempVideoFile = null
+            }
+
+            startFrameConsumer()
+
             _uiState.value = _uiState.value.copy(
-                hintMessage = "SpectreFlow Pro required for ${duration.seconds}s exposure"
+                isCapturing = true,
+                captureProgress = 0f,
+                elapsedSeconds = 0f,
+                hintMessage = null,
+                statusMessage = "Capturing burst frames…"
             )
+            return true
+        } catch (t: Throwable) {
+            Log.e("SpectreFlow", "onStartBurstCapture fatal error", t)
+            showCrashDialog(
+                title = "Lỗi khi bắt đầu phơi sáng",
+                message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Lỗi hệ thống máy ảnh"}",
+                stackTrace = t.stackTraceToString()
+            )
+            cleanupCapture()
+            captureState.set(CaptureState.IDLE)
             return false
         }
-
-        triggerHaptic()
-        cleanupCapture()
-        captureState.set(CaptureState.CAPTURING)
-
-        // Resolve active mode (Auto picks detected scene mode)
-        effectiveModeAtCapture = if (_uiState.value.selectedMode == LongExposureMode.AUTO) {
-            _uiState.value.detectedMode
-        } else {
-            _uiState.value.selectedMode
-        }
-
-        if (_uiState.value.settings.saveCompanionVideo) {
-            tempVideoFile = File(getApplication<Application>().cacheDir, "spectreflow_burst_${System.currentTimeMillis()}.mp4")
-            videoRecorder = CompanionVideoRecorder(getApplication())
-        } else {
-            videoRecorder = null
-            tempVideoFile = null
-        }
-
-        startFrameConsumer()
-
-        _uiState.value = _uiState.value.copy(
-            isCapturing = true,
-            captureProgress = 0f,
-            elapsedSeconds = 0f,
-            hintMessage = null,
-            statusMessage = "Capturing burst frames…"
-        )
-        return true
     }
 
     private fun startFrameConsumer() {
@@ -221,7 +243,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         frameAligner = FrameAligner(width, height)
 
                         tempVideoFile?.let { file ->
-                            videoRecorder?.start(file, width, height)
+                            try {
+                                videoRecorder?.start(file, width, height)
+                            } catch (vt: Throwable) {
+                                Log.w("SpectreFlow", "Companion video start failed: ${vt.localizedMessage}")
+                            }
                         }
                         isFirstFrame = false
                     }
@@ -231,7 +257,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val alignedBitmap = alignment?.alignedBitmap ?: bitmap
 
                     blenderEngine.addFrame(alignedBitmap)
-                    videoRecorder?.addFrame(alignedBitmap)
+                    try {
+                        videoRecorder?.addFrame(alignedBitmap)
+                    } catch (vt: Throwable) {
+                        Log.w("SpectreFlow", "Companion video addFrame failed: ${vt.localizedMessage}")
+                    }
 
                     // Keyframe preview cache (up to 16 frames max, downsampled to 360px wide to save RAM)
                     if (burstKeyframes.size < 16) {
@@ -244,8 +274,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     if (alignedBitmap != bitmap) {
                         alignedBitmap.recycle()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } catch (t: Throwable) {
+                    Log.e("SpectreFlow", "Error in burst frame processor: ${t.localizedMessage}", t)
                 } finally {
                     bitmap.recycle()
                 }
@@ -346,14 +376,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     processingProgress = 1f
                 )
                 captureState.set(CaptureState.RESULT)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (t: Throwable) {
+                Log.e("SpectreFlow", "finalizeCapture failed", t)
                 cleanupCapture()
                 captureState.set(CaptureState.ERROR)
                 _uiState.value = _uiState.value.copy(
                     currentScreen = AppScreen.CAMERA,
                     isCapturing = false,
-                    hintMessage = "Processing failed: ${e.localizedMessage ?: "Unknown error"}"
+                    hintMessage = "Processing failed: ${t.localizedMessage ?: "Unknown error"}"
+                )
+                showCrashDialog(
+                    title = "Lỗi tổng hợp phơi sáng",
+                    message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể ghép khung hình"}",
+                    stackTrace = t.stackTraceToString()
                 )
             }
         }
@@ -508,6 +543,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: Exception) {
             // Ignore if vibration unsupported
         }
+    }
+
+    fun showCrashDialog(title: String, message: String, stackTrace: String) {
+        Log.e("SpectreFlow_Crash", "$title: $message\n$stackTrace")
+        _crashDialog.value = AppCrashInfo(title, message, stackTrace)
+    }
+
+    fun dismissCrashDialog() {
+        _crashDialog.value = null
+        cleanupCapture()
+        captureState.set(CaptureState.IDLE)
+        _uiState.value = _uiState.value.copy(
+            isCapturing = false,
+            currentScreen = AppScreen.CAMERA
+        )
     }
 
     override fun onCleared() {

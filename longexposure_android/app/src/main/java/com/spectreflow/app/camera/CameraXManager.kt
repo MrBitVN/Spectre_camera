@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.SystemClock
+import android.util.Log
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraControl
 import androidx.camera.core.CameraSelector
@@ -193,30 +194,38 @@ class CameraXManager(private val context: Context) {
     fun startBurst(maxDurationSeconds: Int) {
         if (isCapturing.get()) return
 
-        lockSensorSettings()
-        isCapturing.set(true)
-        captureStartTimeMs = SystemClock.elapsedRealtime()
+        try {
+            lockSensorSettings()
+            isCapturing.set(true)
+            captureStartTimeMs = SystemClock.elapsedRealtime()
 
-        val totalDurationMs = maxDurationSeconds * 1000L
-        val intervalMs = 50L
+            val totalDurationMs = maxDurationSeconds * 1000L
+            val intervalMs = 50L
 
-        captureJob = scope.launch {
-            while (isCapturing.get()) {
-                delay(intervalMs)
-                val elapsedMs = SystemClock.elapsedRealtime() - captureStartTimeMs
-                val progress = (elapsedMs.toFloat() / totalDurationMs).coerceIn(0f, 1f)
-                val elapsedSec = elapsedMs / 1000f
-                onBurstProgress?.invoke(progress, elapsedSec)
+            captureJob = scope.launch {
+                while (isCapturing.get()) {
+                    delay(intervalMs)
+                    try {
+                        val elapsedMs = SystemClock.elapsedRealtime() - captureStartTimeMs
+                        val progress = (elapsedMs.toFloat() / totalDurationMs).coerceIn(0f, 1f)
+                        val elapsedSec = elapsedMs / 1000f
+                        onBurstProgress?.invoke(progress, elapsedSec)
 
-                if (elapsedMs >= totalDurationMs) {
-                    // Auto-finish when maximum duration cap is reached
-                    if (isCapturing.compareAndSet(true, false)) {
-                        unlockSensorSettings()
-                        onBurstComplete?.invoke()
+                        if (elapsedMs >= totalDurationMs) {
+                            // Auto-finish when maximum duration cap is reached
+                            if (isCapturing.compareAndSet(true, false)) {
+                                unlockSensorSettings()
+                                onBurstComplete?.invoke()
+                            }
+                            break
+                        }
+                    } catch (t: Throwable) {
+                        Log.e("CameraXManager", "Error in burst loop tick", t)
                     }
-                    break
                 }
             }
+        } catch (t: Throwable) {
+            Log.e("CameraXManager", "Failed to start burst", t)
         }
     }
 
@@ -253,8 +262,8 @@ class CameraXManager(private val context: Context) {
             ).disableAutoCancel().build()
 
             ctrl.startFocusAndMetering(action)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (t: Throwable) {
+            Log.w("CameraXManager", "lockSensorSettings failed safely: ${t.localizedMessage}")
         }
     }
 
@@ -262,8 +271,8 @@ class CameraXManager(private val context: Context) {
         val ctrl = camera?.cameraControl ?: return
         try {
             ctrl.cancelFocusAndMetering()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (t: Throwable) {
+            Log.w("CameraXManager", "unlockSensorSettings failed safely: ${t.localizedMessage}")
         }
     }
 

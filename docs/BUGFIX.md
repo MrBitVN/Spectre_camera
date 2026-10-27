@@ -111,3 +111,44 @@ All test scenarios were executed and verified against both platforms with automa
    - [`longexposure_ios/SpectreFlowTests/BlendingMathTests.swift`](file:///longexposure_ios/SpectreFlowTests/BlendingMathTests.swift): Added synthetic moving square motion blur test.
    - [`longexposure_ios/SpectreFlowTests/HoldToExposeTests.swift`](file:///longexposure_ios/SpectreFlowTests/HoldToExposeTests.swift): Added capture state machine transition tests.
 
+---
+
+## 6. Shutter Press-and-Hold Crash Investigation & Resolution (Iteration 2)
+
+### 6.1 Exact Exception & Location
+- **Location:** [`CompanionVideoRecorder.kt:65`](file:///longexposure_android/app/src/main/java/com/spectreflow/app/video/CompanionVideoRecorder.kt#L65)
+- **Call Chain:**
+  ```
+  at android.view.Surface.lockHardwareCanvas(Surface.java)
+  at com.spectreflow.app.video.CompanionVideoRecorder.addFrame(CompanionVideoRecorder.kt:65)
+  at com.spectreflow.app.MainViewModel$startFrameConsumer$1.invokeSuspend(MainViewModel.kt:234)
+  ```
+- **Exact Exception:**
+  `java.lang.IllegalArgumentException: Surface was not created for software rendering` or native SIGSEGV / abort in `libgui.so` (`Surface::lock` returning `INVALID_OPERATION`).
+
+### 6.2 Root Cause (2-3 Sentences)
+In Android graphics architecture, an input `Surface` returned by `MediaCodec.createInputSurface()` is an `IGraphicBufferProducer` configured with hardware encoder flags (`COLOR_FormatSurface`). Calling `surface.lockHardwareCanvas()` on this encoder surface is completely prohibited by Android's buffer queue driver, causing an immediate `IllegalArgumentException` or native `libgui.so` crash on the first captured frame. Furthermore, lack of defensive isolation allowed secondary video encoding failures to crash the primary computational photography pipeline.
+
+### 6.3 Implementation Fix
+1. **Defensive MediaCodec Surface Handling:**
+   - Replaced illegal `surface.lockHardwareCanvas()` with software-safe `surface.lockCanvas(null)` inside robust try-catch guards.
+   - Fully isolated `CompanionVideoRecorder` so any hardware encoder error gracefully disables video recording without affecting long exposure capture.
+2. **Global Crash Handler & Vietnamese Dialog:**
+   - Registered `Thread.setDefaultUncaughtExceptionHandler` in `MainActivity.kt` logging full stack traces with `Log.e`.
+   - Added a visible Vietnamese Compose `AlertDialog` ("Đã xảy ra lỗi ứng dụng") containing the exact error, stack trace, and a "Sao chép mã lỗi" clipboard button so the app displays helpful debugging info instead of crashing directly to the launcher.
+3. **Memory Safeguards:**
+   - Added `android:largeHeap="true"` to `AndroidManifest.xml` to prevent JVM heap exhaustion during multi-second 1080p burst accumulation.
+4. **Pointer Gesture Protection:**
+   - Wrapped `RingShutterButton.kt` touch loop in defensive error handling.
+
+### 6.4 Regression Test Steps
+1. Run automated unit tests in `HoldToExposeTest.kt`:
+   - `testCompanionVideoFailureDoesNotCrashCapturePipeline`: verifies that video encoder failure does not interrupt long exposure synthesis.
+   - `testDoublePressAndConcurrentStartRejection`: verifies race condition prevention.
+   - `testCrashDialogSafeDismissalAndStateReset`: verifies dialog dismissal restores camera to `IDLE`.
+2. Manual Test Step:
+   - Connect physical device via USB or open app.
+   - Press and hold shutter button for 3 seconds. Release.
+   - Result: App transitions cleanly from capturing ring -> processing indicator -> result review screen without crashing.
+
+

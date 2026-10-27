@@ -74,34 +74,46 @@ fun RingShutterButton(
             }
             .pointerInput(enabled) {
                 if (!enabled) return@pointerInput
-                awaitPointerEventScope {
-                    while (true) {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        val center = Offset(size.width / 2f, size.height / 2f)
-                        val cancelDistance = size.width * 1.5f
-                        onPressStart()
-
-                        var isCancelled = false
+                try {
+                    awaitPointerEventScope {
                         while (true) {
-                            val event = awaitPointerEvent(PointerEventPass.Main)
-                            val current = event.changes.firstOrNull { it.id == down.id }
-                            if (current == null || !current.pressed) {
-                                // Pointer lifted up
-                                break
+                            val down = awaitFirstDown(requireUnconsumed = false)
+                            val center = Offset(size.width / 2f, size.height / 2f)
+                            val cancelDistance = size.width * 1.5f
+                            try {
+                                onPressStart()
+                            } catch (t: Throwable) {
+                                android.util.Log.e("RingShutterButton", "onPressStart failed", t)
                             }
-                            val dist = (current.position - center).getDistance()
-                            if (dist > cancelDistance) {
-                                isCancelled = true
-                                break
-                            }
-                        }
 
-                        if (isCancelled) {
-                            onPressCancel()
-                        } else {
-                            onPressRelease()
+                            var isCancelled = false
+                            while (true) {
+                                val event = awaitPointerEvent(PointerEventPass.Main)
+                                val current = event.changes.firstOrNull { it.id == down.id }
+                                if (current == null || !current.pressed) {
+                                    // Pointer lifted up
+                                    break
+                                }
+                                val dist = (current.position - center).getDistance()
+                                if (dist > cancelDistance) {
+                                    isCancelled = true
+                                    break
+                                }
+                            }
+
+                            try {
+                                if (isCancelled) {
+                                    onPressCancel()
+                                } else {
+                                    onPressRelease()
+                                }
+                            } catch (t: Throwable) {
+                                android.util.Log.e("RingShutterButton", "onPressRelease/Cancel failed", t)
+                            }
                         }
                     }
+                } catch (t: Throwable) {
+                    android.util.Log.e("RingShutterButton", "Pointer event loop aborted safely", t)
                 }
             }
     ) {

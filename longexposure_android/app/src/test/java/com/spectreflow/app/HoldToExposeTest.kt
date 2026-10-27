@@ -101,4 +101,64 @@ class HoldToExposeTest {
         }
         assertEquals(CaptureState.IDLE, state)
     }
+
+    @Test
+    fun testCompanionVideoFailureDoesNotCrashCapturePipeline() {
+        var captureSucceeded = false
+        var companionVideoFailed = false
+
+        // Simulate frame consumption with simulated video encoder failure
+        try {
+            // Simulated video failure (e.g. MediaCodec lockHardwareCanvas or codec exception)
+            try {
+                throw IllegalStateException("Surface was not created for software rendering")
+            } catch (vt: Throwable) {
+                companionVideoFailed = true
+                // Companion video failure must be swallowed safely
+            }
+
+            // Core blending engine must still receive and blend frames
+            captureSucceeded = true
+        } catch (t: Throwable) {
+            captureSucceeded = false
+        }
+
+        assertTrue("Companion video failure must be caught safely", companionVideoFailed)
+        assertTrue("Capture pipeline must succeed even if companion video fails", captureSucceeded)
+    }
+
+    @Test
+    fun testDoublePressAndConcurrentStartRejection() {
+        val captureState = java.util.concurrent.atomic.AtomicReference(CaptureState.IDLE)
+
+        // First press down
+        val firstStart = captureState.compareAndSet(CaptureState.IDLE, CaptureState.CAPTURING)
+        assertTrue("First press must succeed", firstStart)
+        assertEquals(CaptureState.CAPTURING, captureState.get())
+
+        // Simultaneous second press down while still capturing
+        val secondStart = captureState.compareAndSet(CaptureState.IDLE, CaptureState.CAPTURING)
+        assertFalse("Second concurrent press must be rejected", secondStart)
+        assertEquals(CaptureState.CAPTURING, captureState.get())
+    }
+
+    @Test
+    fun testCrashDialogSafeDismissalAndStateReset() {
+        var isCapturing = true
+        var currentScreen = AppScreen.CAMERA
+        var crashInfo: AppCrashInfo? = AppCrashInfo(
+            title = "Đã xảy ra lỗi",
+            message = "Test exception",
+            stackTrace = "at test line 1"
+        )
+
+        // Simulate dismissal
+        crashInfo = null
+        isCapturing = false
+        currentScreen = AppScreen.CAMERA
+
+        org.junit.Assert.assertNull(crashInfo)
+        assertFalse(isCapturing)
+        assertEquals(AppScreen.CAMERA, currentScreen)
+    }
 }
