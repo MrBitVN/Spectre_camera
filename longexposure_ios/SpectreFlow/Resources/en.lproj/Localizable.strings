@@ -1,97 +1,97 @@
-/* SpectreFlow Vietnamese Strings (Enforced) */
+/* SpectreFlow English Strings */
 "app_name" = "SpectreFlow";
-"tagline" = "Máy ảnh Phơi sáng dài AI";
+"tagline" = "AI Long Exposure Camera";
 
 /* Modes */
-"mode_auto" = "Tự động";
-"mode_short_motion_blur" = "Nhòe";
-"mode_short_light_trails" = "Vệt sáng";
-"mode_short_vanish" = "Xóa vật thể";
-"mode_motion_blur" = "Nhòe chuyển động";
-"mode_motion_blur_desc" = "Nước chảy mượt như lụa, mây trôi bồng bềnh, dòng người mờ ảo";
-"mode_light_trails" = "Vệt sáng";
-"mode_light_trails_desc" = "Vệt đèn xe đêm, pháo hoa, vệt sao trên bầu trời";
-"mode_vanish" = "Xóa vật thể di chuyển";
-"mode_vanish_desc" = "Tự động xóa người và phương tiện chuyển động bằng trung vị thời gian";
+"mode_auto" = "Auto";
+"mode_short_motion_blur" = "Blur";
+"mode_short_light_trails" = "Trails";
+"mode_short_vanish" = "Vanish";
+"mode_motion_blur" = "Motion Blur";
+"mode_motion_blur_desc" = "Smooth silky water, clouds, ghosted crowds";
+"mode_light_trails" = "Light Trails";
+"mode_light_trails_desc" = "Capture vehicle light streaks, stars, fireworks";
+"mode_vanish" = "Vanish";
+"mode_vanish_desc" = "Remove moving people and traffic using temporal median";
 
 /* Stability */
-"stability_stable" = "Ổn định";
-"stability_shaky" = "Đang rung";
+"stability_stable" = "STABLE";
+"stability_shaky" = "SHAKY";
 
 /* Processing */
-"capturing_burst" = "Đang chụp chuỗi khung hình…";
-"aligning_frames" = "Đang căn chỉnh khung hình AI Vision…";
-"blending_frames" = "Đang xử lý...";
+"capturing_burst" = "Capturing burst frames…";
+"aligning_frames" = "Aligning frames with AI Vision…";
+"blending_frames" = "Synthesizing long exposure…";
 
 /* Result */
-"result_title" = "Kết quả Phơi sáng dài";
-"action_save" = "Lưu";
-"action_share" = "Chia sẻ";
-"action_share_video" = "Chia sẻ Video";
-"action_export_wallpaper" = "Hình nền";
-"hint_wallpaper_saved" = "Đã lưu video lặp hình nền vào Album!";
-"action_discard" = "Hủy bỏ";
-"action_pick_as_cover" = "Chọn làm kết quả";
-"label_scrub_frames" = "Tua chọn khung hình";
-"label_composite_result" = "Ảnh phơi sáng tổng hợp";
-"label_composite_active" = "Đang chọn ảnh tổng hợp";
-"label_frame_index" = "Khung hình %d / %d";
-"save_success" = "Đã lưu vào Album Ảnh thành công!";
-"save_failed" = "Lỗi khi lưu ảnh.";
+"result_title" = "Long Exposure Result";
+"action_save" = "Save";
+"action_share" = "Share";
+"action_share_video" = "Share Video";
+"action_export_wallpaper" = "Wallpaper";
+"hint_wallpaper_saved" = "Looping wallpaper saved to Photos!";
+"action_discard" = "Discard";
+"action_pick_as_cover" = "Pick as Result";
+"label_scrub_frames" = "Scrub burst frames";
+"label_composite_result" = "Long Exposure Composite";
+"label_composite_active" = "Long Exposure Active";
+"label_frame_index" = "Frame %d of %d";
+"save_success" = "Saved to Photos successfully!";
+"save_failed" = "Failed to save photo.";
 
 /* Settings */
-"settings_title" = "Cài đặt";
-"setting_grid" = "Lưới bố cục 3x3";
-"setting_haptics" = "Rung phản hồi";
-"setting_companion_video" = "Lưu Video kèm theo (Live Photo)";
-"setting_companion_video_desc" = "Lưu video MOV đi kèm để tua chọn khung hình khác và lưu dạng Live Photo";
-"setting_resolution" = "Độ phân giải ảnh";
-"resolution_high" = "Cao (4K / Gốc)";
-"resolution_balanced" = "Cân bằng (1080p)";
-"setting_app_icon" = "Biểu tượng ứng dụng";
-"setting_pro_unlocked" = "Mở khóa SpectreFlow Pro";
-"setting_pro_desc" = "Mở khóa thời lượng 15s & 30s và biểu tượng Pro";
+"settings_title" = "Settings";
+"setting_grid" = "Rule of Thirds Grid";
+"setting_haptics" = "Haptic Feedback";
+"setting_companion_video" = "Save Companion Video (Live Photo)";
+"setting_companion_video_desc" = "Save companion MOV to scrub frames and export as Live Photo";
+"setting_resolution" = "Output Resolution";
+"resolution_high" = "High (4K / Full Sensor)";
+"resolution_balanced" = "Balanced (1080p)";
+"setting_app_icon" = "App Icon Theme";
+"setting_pro_unlocked" = "SpectreFlow Pro Unlocked";
+"setting_pro_desc" = "Unlocks 15s & 30s exposures and Pro icons";
 
 /* Prompts & Hints */
-"hint_press_hold" = "Nhấn giữ để chụp";
-"hint_release_to_capture" = "Thả tay để chụp • Tối đa %ds";
-"hint_hold_longer" = "Giữ lâu hơn để chụp";
-"hint_pro_required" = "Cần SpectreFlow Pro cho phơi sáng %ds";
-"limited_access_hint" = "Quyền ảnh giới hạn: ảnh và video vẫn được lưu trực tiếp vào bộ sưu tập";
-"action_view_tutorial" = "Xem hướng dẫn sử dụng";
+"hint_press_hold" = "Press & hold to expose";
+"hint_release_to_capture" = "Release to capture • Max %ds";
+"hint_hold_longer" = "Hold longer to capture (min 1s)";
+"hint_pro_required" = "SpectreFlow Pro required for %ds exposure";
+"limited_access_hint" = "Limited photo access: photos and companion videos save directly to library";
+"action_view_tutorial" = "View Tutorial";
 
 /* Onboarding */
-"action_skip" = "Bỏ qua";
-"action_next" = "Tiếp tục";
-"onboarding_get_started" = "Bắt đầu ngay";
-"onboarding_step1_title" = "Nhấn giữ để chụp";
-"onboarding_step1_subtitle" = "Thả tay để hoàn tất phơi sáng dài";
-"onboarding_step1_bullet1" = "Nhấn và giữ nút chụp để bắt đầu chuỗi khung hình liên tiếp.";
-"onboarding_step1_bullet2" = "Cảm biến sẽ tự động khóa sáng, lấy nét và cân bằng trắng ngay lập tức.";
-"onboarding_step1_bullet3" = "Thả tay bất cứ khi nào sau 1 giây để tổng hợp thành một bức ảnh hoàn chỉnh.";
-"onboarding_step2_title" = "Chân máy & Cầm tay";
-"onboarding_step2_subtitle" = "Cảm biến con quay hồi chuyển 6 trục";
-"onboarding_step2_bullet1" = "Huy hiệu Ổn định: Bỏ qua căn chỉnh để tiết kiệm pin tối đa.";
-"onboarding_step2_bullet2" = "Huy hiệu Đang rung: Bật AI Vision căn chỉnh bù trừ chuyển động tay.";
-"onboarding_step2_bullet3" = "Viền ảnh được xén thông minh giữ chi tiết tĩnh sắc nét tối đa.";
-"onboarding_step3_title" = "Chế độ AI Thông minh";
-"onboarding_step3_subtitle" = "Tự động phân tích bối cảnh & Tùy chọn";
-"onboarding_step3_bullet1" = "Chế độ Tự động nhận diện ánh sáng và chuyển động để chọn chế độ tối ưu.";
-"onboarding_step3_bullet2" = "Nhòe chuyển động: Nước chảy mượt như lụa, mây trôi bồng bềnh.";
-"onboarding_step3_bullet3" = "Vệt sáng: Chụp đèn xe; Xóa vật thể di chuyển để xóa người và xe cộ.";
+"action_skip" = "Skip";
+"action_next" = "Next";
+"onboarding_get_started" = "Get Started";
+"onboarding_step1_title" = "Hold to Expose";
+"onboarding_step1_subtitle" = "Release to synthesize long exposure";
+"onboarding_step1_bullet1" = "Press and hold the shutter button to start streaming burst frames.";
+"onboarding_step1_bullet2" = "Sensors immediately lock exposure, focus, and white balance.";
+"onboarding_step1_bullet3" = "Release anytime after 1 second to blend into a single photo.";
+"onboarding_step2_title" = "Tripod vs. Handheld";
+"onboarding_step2_subtitle" = "Real-time 6-axis gyro stability";
+"onboarding_step2_bullet1" = "STABLE badge indicates tripod mounting: alignment is bypassed to save battery.";
+"onboarding_step2_bullet2" = "SHAKY badge activates AI auto-alignment to cancel hand tremor.";
+"onboarding_step2_bullet3" = "Borders are cleanly cropped to preserve razor-sharp static details.";
+"onboarding_step3_title" = "Intelligent AI Modes";
+"onboarding_step3_subtitle" = "Auto scene analysis & manual control";
+"onboarding_step3_bullet1" = "Auto mode detects lighting and motion to select the optimal mode.";
+"onboarding_step3_bullet2" = "Motion Blur smooths silky waterfalls, fog, and passing clouds.";
+"onboarding_step3_bullet3" = "Light Trails paints night traffic and stars; Vanish erases crowds.";
 
 /* Permissions */
-"permission_camera_title" = "Yêu cầu quyền Camera";
-"permission_camera_desc" = "SpectreFlow cần truy cập máy ảnh để chụp chuỗi khung hình liên tiếp phục vụ thuật toán phơi sáng dài AI.";
-"permission_grant" = "Cấp quyền máy ảnh";
+"permission_camera_title" = "Camera Permission Required";
+"permission_camera_desc" = "SpectreFlow needs camera access to capture burst frames for computational long exposure blending.";
+"permission_grant" = "Grant Camera Permission";
 
 /* Accessibility */
-"cd_shutter_capturing" = "Đang phơi sáng ảnh. Giữ để tiếp tục, thả tay để chụp";
-"cd_shutter_idle" = "Nút chụp. Nhấn giữ để chụp, thả tay để hoàn tất";
-"cd_zoom" = "Độ thu phóng %@";
-"cd_flip_camera" = "Đổi camera trước sau";
-"cd_capture_mode" = "Chế độ chụp: %@";
-"cd_duration" = "Thời lượng phơi sáng %@";
-"cd_duration_pro" = "Thời lượng phơi sáng %@, yêu cầu bản Pro";
-"cd_settings" = "Cài đặt";
-"cd_back" = "Quay lại";
+"cd_shutter_capturing" = "Exposing long exposure photo. Hold to continue, release to capture";
+"cd_shutter_idle" = "Shutter button. Press and hold to expose, release to capture";
+"cd_zoom" = "Zoom level %@";
+"cd_flip_camera" = "Flip camera front or back";
+"cd_capture_mode" = "Capture Mode: %@";
+"cd_duration" = "Exposure duration %@";
+"cd_duration_pro" = "Exposure duration %@, Pro required";
+"cd_settings" = "Settings";
+"cd_back" = "Back";

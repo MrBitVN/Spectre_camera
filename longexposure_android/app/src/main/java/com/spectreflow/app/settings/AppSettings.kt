@@ -22,13 +22,13 @@ enum class OutputResolution {
 }
 
 enum class AppLanguage(val code: String, val displayName: String) {
-    VIETNAMESE("vi", "Tiếng Việt")
+    ENGLISH("en", "English")
 }
 
 enum class AppIconTheme(val id: String, val displayName: String) {
-    OBSIDIAN_EMERALD("emerald", "Obsidian Lục bảo (Mặc định)"),
-    CYBER_MINT("mint", "Cyber Mint (Bản Pro)"),
-    DEEP_GOLD("gold", "Vàng ánh kim (Bản Pro)")
+    OBSIDIAN_EMERALD("emerald", "Obsidian Emerald (Default)"),
+    CYBER_MINT("mint", "Cyber Mint (Pro)"),
+    DEEP_GOLD("gold", "Deep Gold (Pro)")
 }
 
 data class AppSettingsState(
@@ -40,7 +40,7 @@ data class AppSettingsState(
     val isProUnlocked: Boolean = false,
     val selectedAppIcon: AppIconTheme = AppIconTheme.OBSIDIAN_EMERALD,
     val hasSeenOnboarding: Boolean = false,
-    val language: AppLanguage = AppLanguage.VIETNAMESE
+    val language: AppLanguage = AppLanguage.ENGLISH
 )
 
 class AppSettingsManager(context: Context) {
@@ -56,7 +56,7 @@ class AppSettingsManager(context: Context) {
         val isPro = prefs.getBoolean("is_pro", false)
         val iconId = prefs.getString("app_icon", AppIconTheme.OBSIDIAN_EMERALD.id) ?: AppIconTheme.OBSIDIAN_EMERALD.id
         val seenOnboarding = prefs.getBoolean("has_seen_onboarding", false)
-        val langCode = prefs.getString("language", AppLanguage.VIETNAMESE.code) ?: AppLanguage.VIETNAMESE.code
+        val langCode = prefs.getString("language", AppLanguage.ENGLISH.code) ?: AppLanguage.ENGLISH.code
 
         return AppSettingsState(
             duration = CaptureDuration.fromSeconds(durationSec),
@@ -67,7 +67,7 @@ class AppSettingsManager(context: Context) {
             isProUnlocked = isPro,
             selectedAppIcon = AppIconTheme.entries.find { it.id == iconId } ?: AppIconTheme.OBSIDIAN_EMERALD,
             hasSeenOnboarding = seenOnboarding,
-            language = AppLanguage.VIETNAMESE
+            language = AppLanguage.ENGLISH
         )
     }
 

@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -90,8 +91,8 @@ class MainActivity : ComponentActivity() {
             val stackTrace = throwable.stackTraceToString()
             runOnUiThread {
                 viewModel.showCrashDialog(
-                    title = "Đã xảy ra lỗi ứng dụng",
-                    message = "${throwable.javaClass.simpleName}: ${throwable.localizedMessage ?: "Lỗi ngoại lệ hệ thống"}",
+                    title = getString(R.string.error_dialog_title),
+                    message = "${throwable.javaClass.simpleName}: ${throwable.localizedMessage ?: "System exception"}",
                     stackTrace = stackTrace
                 )
             }
@@ -182,8 +183,8 @@ class MainActivity : ComponentActivity() {
                                     } catch (t: Throwable) {
                                         Log.e("MainActivity", "onShutterPressStart error", t)
                                         viewModel.showCrashDialog(
-                                            title = "Lỗi khi bắt đầu phơi sáng",
-                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể khởi động luồng máy ảnh"}",
+                                            title = getString(R.string.error_start_title),
+                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Failed to start camera capture"}",
                                             stackTrace = t.stackTraceToString()
                                         )
                                     }
@@ -195,8 +196,8 @@ class MainActivity : ComponentActivity() {
                                     } catch (t: Throwable) {
                                         Log.e("MainActivity", "onShutterPressRelease error", t)
                                         viewModel.showCrashDialog(
-                                            title = "Lỗi khi kết thúc phơi sáng",
-                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể dừng luồng chụp"}",
+                                            title = getString(R.string.error_stop_title),
+                                            message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Failed to stop capture session"}",
                                             stackTrace = t.stackTraceToString()
                                         )
                                     }
@@ -308,7 +309,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                     Spacer(modifier = Modifier.height(10.dp))
                                     Text(
-                                        text = "Chi tiết ngăn xếp lỗi (Stack Trace):",
+                                        text = stringResource(R.string.error_stack_trace_label),
                                         color = Color(0xFF90A4AE),
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Medium
@@ -333,18 +334,18 @@ class MainActivity : ComponentActivity() {
                                             "${info.title}\n${info.message}\n\n${info.stackTrace}"
                                         )
                                         clipboard.setPrimaryClip(clip)
-                                        Toast.makeText(this@MainActivity, "Đã sao chép mã lỗi vào bộ nhớ tạm", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@MainActivity, getString(R.string.toast_error_copied), Toast.LENGTH_SHORT).show()
                                     },
                                     colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
                                 ) {
-                                    Text("Sao chép mã lỗi", color = BgObsidian, fontWeight = FontWeight.Bold)
+                                    Text(stringResource(R.string.action_copy_error), color = BgObsidian, fontWeight = FontWeight.Bold)
                                 }
                             },
                             dismissButton = {
                                 OutlinedButton(
                                     onClick = { viewModel.dismissCrashDialog() }
                                 ) {
-                                    Text("Đóng", color = Color.White)
+                                    Text(stringResource(R.string.action_close), color = Color.White)
                                 }
                             },
                             containerColor = Color(0xFF1E2228),
@@ -423,7 +424,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun applyLocale(language: AppLanguage) {
-        val locale = Locale("vi", "VN")
+        val locale = Locale("en", "US")
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)

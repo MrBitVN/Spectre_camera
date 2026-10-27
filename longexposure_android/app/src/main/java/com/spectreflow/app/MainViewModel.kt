@@ -213,8 +213,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } catch (t: Throwable) {
             Log.e("SpectreFlow", "onStartBurstCapture fatal error", t)
             showCrashDialog(
-                title = "Lỗi khi bắt đầu phơi sáng",
-                message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Lỗi hệ thống máy ảnh"}",
+                title = getApplication<Application>().getString(R.string.error_start_title),
+                message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Camera system error"}",
                 stackTrace = t.stackTraceToString()
             )
             cleanupCapture()
@@ -383,11 +383,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = _uiState.value.copy(
                     currentScreen = AppScreen.CAMERA,
                     isCapturing = false,
-                    hintMessage = "Xử lý thất bại: ${t.localizedMessage ?: "Lỗi không xác định"}"
+                    hintMessage = "Processing failed: ${t.localizedMessage ?: "Unknown error"}"
                 )
                 showCrashDialog(
-                    title = "Lỗi tổng hợp phơi sáng",
-                    message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Không thể ghép khung hình"}",
+                    title = getApplication<Application>().getString(R.string.error_blend_title),
+                    message = "${t.javaClass.simpleName}: ${t.localizedMessage ?: "Failed to blend frames"}",
                     stackTrace = t.stackTraceToString()
                 )
             }
