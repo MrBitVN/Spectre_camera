@@ -79,7 +79,7 @@ fun SettingsScreen(
                     .clip(CircleShape)
                     .background(BgCard)
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = TextPrimary)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back), tint = TextPrimary)
             }
             Text(
                 text = " " + stringResource(R.string.settings_title),
@@ -141,32 +141,6 @@ fun SettingsScreen(
                 title = stringResource(R.string.resolution_balanced),
                 isSelected = settings.resolution == OutputResolution.BALANCED,
                 onClick = { onSettingsChanged(settings.copy(resolution = OutputResolution.BALANCED)) }
-            )
-        }
-
-        HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
-
-        // Language Setting
-        Text(
-            text = stringResource(R.string.setting_language),
-            color = TextPrimary,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Medium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            OptionChip(
-                title = "English",
-                isSelected = settings.language == AppLanguage.ENGLISH,
-                onClick = { onSettingsChanged(settings.copy(language = AppLanguage.ENGLISH)) }
-            )
-            OptionChip(
-                title = "Tiếng Việt",
-                isSelected = settings.language == AppLanguage.VIETNAMESE,
-                onClick = { onSettingsChanged(settings.copy(language = AppLanguage.VIETNAMESE)) }
             )
         }
 

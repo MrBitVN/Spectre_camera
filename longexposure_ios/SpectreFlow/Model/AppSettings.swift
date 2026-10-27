@@ -26,16 +26,12 @@ public enum OutputResolution: String, CaseIterable, Identifiable {
 }
 
 public enum AppLanguage: String, CaseIterable, Identifiable {
-    case english = "en"
     case vietnamese = "vi"
 
     public var id: String { rawValue }
 
     public var displayName: String {
-        switch self {
-        case .english: return "English"
-        case .vietnamese: return "Tiếng Việt"
-        }
+        return "Tiếng Việt"
     }
 }
 
@@ -48,9 +44,9 @@ public enum AppIconTheme: String, CaseIterable, Identifiable {
 
     public var displayName: String {
         switch self {
-        case .obsidianEmerald: return "Obsidian Emerald"
-        case .cyberMint: return "Cyber Mint (Pro)"
-        case .deepGold: return "Deep Gold (Pro)"
+        case .obsidianEmerald: return "Obsidian Lục bảo (Mặc định)"
+        case .cyberMint: return "Cyber Mint (Bản Pro)"
+        case .deepGold: return "Vàng ánh kim (Bản Pro)"
         }
     }
 }
@@ -64,7 +60,7 @@ public struct AppSettingsState {
     public var isProUnlocked: Bool = false
     public var selectedAppIcon: AppIconTheme = .obsidianEmerald
     public var hasSeenOnboarding: Bool = false
-    public var language: AppLanguage = .english
+    public var language: AppLanguage = .vietnamese
 
     public init() {}
 }

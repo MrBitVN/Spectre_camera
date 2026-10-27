@@ -24,7 +24,7 @@ public struct LensSelector: View {
                             .background(isSelected ? Color.accentEmerald : Color.clear)
                             .clipShape(Circle())
                     }
-                    .accessibilityLabel("Zoom \(label)")
+                    .accessibilityLabel(String(format: NSLocalizedString("cd_zoom", comment: ""), label))
                     .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : [.isButton])
                 }
             }
@@ -39,7 +39,7 @@ public struct LensSelector: View {
                     .background(Color.clear)
                     .clipShape(Circle())
             }
-            .accessibilityLabel("Flip Camera")
+            .accessibilityLabel(NSLocalizedString("cd_flip_camera", comment: ""))
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)

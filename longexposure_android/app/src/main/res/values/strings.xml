@@ -1,24 +1,24 @@
 <resources>
     <string name="app_name">SpectreFlow</string>
-    <string name="tagline">AI Long Exposure Camera</string>
+    <string name="tagline">Máy ảnh Phơi sáng dài AI</string>
 
     <!-- Modes -->
-    <string name="mode_auto">Auto</string>
-    <string name="mode_short_motion_blur">Blur</string>
-    <string name="mode_short_light_trails">Trails</string>
-    <string name="mode_short_vanish">Vanish</string>
-    <string name="mode_motion_blur">Motion Blur</string>
-    <string name="mode_motion_blur_desc">Smooth silky water, clouds, ghosted crowds</string>
-    <string name="mode_light_trails">Light Trails</string>
-    <string name="mode_light_trails_desc">Capture vehicle light streaks, stars, fireworks</string>
-    <string name="mode_vanish">Vanish</string>
-    <string name="mode_vanish_desc">Remove moving people &amp; traffic using temporal median</string>
+    <string name="mode_auto">Tự động</string>
+    <string name="mode_short_motion_blur">Nhòe</string>
+    <string name="mode_short_light_trails">Vệt sáng</string>
+    <string name="mode_short_vanish">Xóa vật thể</string>
+    <string name="mode_motion_blur">Nhòe chuyển động</string>
+    <string name="mode_motion_blur_desc">Nước chảy mượt như lụa, mây trôi bồng bềnh, dòng người mờ ảo</string>
+    <string name="mode_light_trails">Vệt sáng</string>
+    <string name="mode_light_trails_desc">Chụp vệt đèn xe đêm, pháo hoa, vệt sao trên bầu trời</string>
+    <string name="mode_vanish">Xóa vật thể di chuyển</string>
+    <string name="mode_vanish_desc">Tự động xóa người và phương tiện chuyển động khỏi khung hình tĩnh</string>
 
     <!-- Stability -->
-    <string name="stability_stable">STABLE</string>
-    <string name="stability_shaky">SHAKY</string>
-    <string name="tripod_hint">Tripod detected: alignment bypassed to save power</string>
-    <string name="handheld_hint">Handheld: AI auto-alignment active</string>
+    <string name="stability_stable">Ổn định</string>
+    <string name="stability_shaky">Đang rung</string>
+    <string name="tripod_hint">Phát hiện chân máy: Bỏ qua căn chỉnh để tiết kiệm pin</string>
+    <string name="handheld_hint">Chụp cầm tay: AI đang tự động căn chỉnh khung hình</string>
 
     <!-- Durations -->
     <string name="duration_3s">3s</string>
@@ -29,70 +29,97 @@
     <string name="pro_badge">PRO</string>
 
     <!-- Processing -->
-    <string name="capturing">Capturing burst…</string>
-    <string name="aligning">Aligning frames with phase correlation…</string>
-    <string name="blending">Blending long exposure…</string>
-    <string name="canceling">Canceling capture…</string>
+    <string name="capturing">Đang chụp chuỗi khung hình…</string>
+    <string name="aligning">Đang căn chỉnh khung hình AI…</string>
+    <string name="blending">Đang xử lý…</string>
+    <string name="canceling">Đang hủy bỏ…</string>
 
     <!-- Result Screen -->
-    <string name="result_title">Long Exposure Result</string>
-    <string name="action_save">Save</string>
-    <string name="action_share">Share</string>
-    <string name="action_share_video">Share Video</string>
-    <string name="action_export_wallpaper">Wallpaper</string>
-    <string name="wallpaper_saved">Looping wallpaper saved to gallery!</string>
-    <string name="wallpaper_failed">Failed to export looping wallpaper</string>
-    <string name="action_discard">Discard</string>
-    <string name="action_pick_as_cover">Pick as Result</string>
-    <string name="label_scrub_frames">Scrub burst frames</string>
-    <string name="label_composite_result">Long Exposure Composite</string>
-    <string name="label_composite_active">Long Exposure Active</string>
-    <string name="label_frame_index">Frame %1$d of %2$d</string>
-    <string name="save_success">Saved to gallery successfully!</string>
-    <string name="save_failed">Failed to save photo</string>
+    <string name="result_title">Kết quả Phơi sáng dài</string>
+    <string name="action_save">Lưu</string>
+    <string name="action_share">Chia sẻ</string>
+    <string name="action_share_video">Chia sẻ Video</string>
+    <string name="action_export_wallpaper">Hình nền</string>
+    <string name="wallpaper_saved">Đã lưu video hình nền lặp vào bộ sưu tập!</string>
+    <string name="wallpaper_failed">Lỗi khi xuất video hình nền</string>
+    <string name="action_discard">Hủy bỏ</string>
+    <string name="action_pick_as_cover">Chọn làm kết quả</string>
+    <string name="label_scrub_frames">Tua chọn khung hình</string>
+    <string name="label_composite_result">Ảnh phơi sáng tổng hợp</string>
+    <string name="label_composite_active">Đang chọn ảnh tổng hợp</string>
+    <string name="label_frame_index">Khung hình %1$d / %2$d</string>
+    <string name="save_success">Đã lưu vào bộ sưu tập thành công!</string>
+    <string name="save_failed">Lỗi khi lưu ảnh</string>
+    <string name="share_photo_title">Chia sẻ ảnh phơi sáng</string>
+    <string name="share_video_title">Chia sẻ video kèm theo</string>
+    <string name="share_prep_error">Không thể chuẩn bị tệp để chia sẻ</string>
+    <string name="share_video_error">Không thể chia sẻ video</string>
 
     <!-- Settings -->
-    <string name="settings_title">Settings</string>
-    <string name="setting_grid">Rule of Thirds Grid</string>
-    <string name="setting_haptics">Haptic Feedback</string>
-    <string name="setting_companion_video">Save Companion Video</string>
-    <string name="setting_companion_video_desc">Record an MP4 companion video to scrub and pick alternative frames</string>
-    <string name="setting_resolution">Output Resolution</string>
-    <string name="resolution_high">High (Full Sensor)</string>
-    <string name="resolution_balanced">Balanced (1080p)</string>
-    <string name="setting_language">Language</string>
-    <string name="setting_app_icon">App Icon Theme</string>
-    <string name="setting_pro_status">SpectreFlow Pro Unlocked</string>
-    <string name="setting_pro_desc">Unlocks 15s &amp; 30s exposures and custom app icons</string>
-    <string name="hint_press_hold">Press &amp; hold to expose</string>
-    <string name="hint_release_to_capture">Release to capture • Max %ds</string>
-    <string name="hint_hold_longer">Hold longer to capture (min 1s)</string>
-    <string name="hint_pro_required">SpectreFlow Pro required for %ds exposure</string>
-    <string name="limited_access_hint">Limited gallery access: photos and companion videos save directly</string>
-    <string name="action_view_tutorial">View Tutorial</string>
+    <string name="settings_title">Cài đặt</string>
+    <string name="setting_grid">Lưới tỷ lệ vàng 3x3</string>
+    <string name="setting_haptics">Rung phản hồi</string>
+    <string name="setting_companion_video">Lưu Video kèm theo</string>
+    <string name="setting_companion_video_desc">Lưu video MP4 để tua chọn khung hình khác và chia sẻ</string>
+    <string name="setting_resolution">Độ phân giải ảnh ra</string>
+    <string name="resolution_high">Cao (Độ phân giải gốc)</string>
+    <string name="resolution_balanced">Cân bằng (1080p)</string>
+    <string name="setting_app_icon">Giao diện biểu tượng</string>
+    <string name="setting_pro_status">Mở khóa SpectreFlow Pro</string>
+    <string name="setting_pro_desc">Mở khóa thời gian phơi sáng 15s, 30s và biểu tượng Pro</string>
+
+    <!-- Prompts & Hints -->
+    <string name="hint_press_hold">Nhấn giữ để chụp</string>
+    <string name="hint_release_to_capture">Thả tay để chụp • Tối đa %ds</string>
+    <string name="hint_hold_longer">Giữ lâu hơn để chụp (tối thiểu 1 giây)</string>
+    <string name="hint_pro_required">Cần SpectreFlow Pro cho phơi sáng %ds</string>
+    <string name="limited_access_hint">Quyền ảnh giới hạn: ảnh và video vẫn được lưu trực tiếp vào bộ sưu tập</string>
+    <string name="action_view_tutorial">Xem hướng dẫn sử dụng</string>
 
     <!-- Onboarding -->
-    <string name="action_skip">Skip</string>
-    <string name="action_next">Next</string>
-    <string name="onboarding_get_started">Get Started</string>
-    <string name="onboarding_step1_title">Hold to Expose</string>
-    <string name="onboarding_step1_subtitle">Release to synthesize long exposure</string>
-    <string name="onboarding_step1_bullet1">Press and hold the shutter button to start streaming burst frames.</string>
-    <string name="onboarding_step1_bullet2">Sensors immediately lock exposure, focus, and white balance.</string>
-    <string name="onboarding_step1_bullet3">Release anytime after 1 second to blend into a single photo.</string>
-    <string name="onboarding_step2_title">Tripod vs. Handheld</string>
-    <string name="onboarding_step2_subtitle">Real-time 6-axis gyro stability</string>
-    <string name="onboarding_step2_bullet1">STABLE badge indicates tripod mounting: alignment is bypassed to save battery.</string>
-    <string name="onboarding_step2_bullet2">SHAKY badge activates AI auto-alignment to cancel hand tremor.</string>
-    <string name="onboarding_step2_bullet3">Borders are cleanly cropped to preserve razor-sharp static details.</string>
-    <string name="onboarding_step3_title">Intelligent AI Modes</string>
-    <string name="onboarding_step3_subtitle">Auto scene analysis &amp; manual control</string>
-    <string name="onboarding_step3_bullet1">Auto mode detects lighting and motion to select the optimal mode.</string>
-    <string name="onboarding_step3_bullet2">Motion Blur smooths silky waterfalls, fog, and passing clouds.</string>
-    <string name="onboarding_step3_bullet3">Light Trails paints night traffic and stars; Vanish erases crowds.</string>
+    <string name="action_skip">Bỏ qua</string>
+    <string name="action_next">Tiếp tục</string>
+    <string name="onboarding_get_started">Bắt đầu ngay</string>
+    <string name="onboarding_step1_title">Nhấn giữ để chụp</string>
+    <string name="onboarding_step1_subtitle">Thả tay để kết thúc phơi sáng dài</string>
+    <string name="onboarding_step1_bullet1">Nhấn và giữ nút chụp để bắt đầu chuỗi khung hình liên tiếp.</string>
+    <string name="onboarding_step1_bullet2">Cảm biến sẽ tự động khóa sáng, lấy nét và cân bằng trắng ngay tức thì.</string>
+    <string name="onboarding_step1_bullet3">Thả tay bất cứ khi nào sau 1 giây để tổng hợp thành một bức ảnh hoàn chỉnh.</string>
+    <string name="onboarding_step2_title">Chân máy &amp; Cầm tay</string>
+    <string name="onboarding_step2_subtitle">Cảm biến con quay hồi chuyển 6 trục</string>
+    <string name="onboarding_step2_bullet1">Huy hiệu Ổn định: Bỏ qua căn chỉnh để tối ưu hóa thời lượng pin.</string>
+    <string name="onboarding_step2_bullet2">Huy hiệu Đang rung: Bật thuật toán AI căn chỉnh bù trừ chuyển động tay.</string>
+    <string name="onboarding_step2_bullet3">Viền ảnh được xén thông minh giữ các chi tiết tĩnh sắc nét tối đa.</string>
+    <string name="onboarding_step3_title">Chế độ AI Thông minh</string>
+    <string name="onboarding_step3_subtitle">Phân tích bối cảnh tự động &amp; Tùy chỉnh</string>
+    <string name="onboarding_step3_bullet1">Chế độ Tự động phân tích ánh sáng và chuyển động để chọn chế độ tối ưu.</string>
+    <string name="onboarding_step3_bullet2">Nhòe chuyển động: Nước chảy mượt như lụa, mây trôi bồng bềnh.</string>
+    <string name="onboarding_step3_bullet3">Vệt sáng: Chụp vệt đèn xe; Xóa vật thể di chuyển để xóa người và xe cộ.</string>
 
     <!-- Permissions -->
-    <string name="permission_camera_title">Camera Permission Required</string>
-    <string name="permission_camera_desc">SpectreFlow needs camera access to capture burst frames for computational long exposure blending.</string>
-    <string name="permission_grant">Grant Permission</string>
+    <string name="permission_camera_title">Cần cấp quyền Camera</string>
+    <string name="permission_camera_desc">SpectreFlow cần truy cập máy ảnh để chụp chuỗi khung hình liên tiếp cho quá trình phơi sáng dài.</string>
+    <string name="permission_grant">Cấp quyền máy ảnh</string>
+
+    <!-- Error Dialog -->
+    <string name="error_dialog_title">Đã xảy ra lỗi ứng dụng</string>
+    <string name="error_start_title">Lỗi khi bắt đầu phơi sáng</string>
+    <string name="error_stop_title">Lỗi khi kết thúc phơi sáng</string>
+    <string name="error_blend_title">Lỗi tổng hợp phơi sáng</string>
+    <string name="error_stack_trace_label">Chi tiết ngăn xếp lỗi (Stack Trace):</string>
+    <string name="action_copy_error">Sao chép mã lỗi</string>
+    <string name="toast_error_copied">Đã sao chép mã lỗi vào bộ nhớ tạm</string>
+    <string name="action_close">Đóng</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_shutter_capturing">Đang phơi sáng ảnh. Giữ để tiếp tục, thả tay để chụp</string>
+    <string name="cd_shutter_idle">Nút chụp. Nhấn giữ để chụp, thả tay để hoàn tất</string>
+    <string name="cd_zoom">Độ thu phóng %s</string>
+    <string name="cd_flip_camera">Đổi camera trước sau</string>
+    <string name="cd_capture_mode">Chế độ chụp: %s</string>
+    <string name="cd_duration">Thời lượng phơi sáng %d giây</string>
+    <string name="cd_duration_pro">Thời lượng phơi sáng %d giây, yêu cầu bản Pro</string>
+    <string name="cd_back">Quay lại</string>
+    <string name="cd_settings">Cài đặt</string>
+    <string name="cd_frame">Khung hình %d</string>
 </resources>

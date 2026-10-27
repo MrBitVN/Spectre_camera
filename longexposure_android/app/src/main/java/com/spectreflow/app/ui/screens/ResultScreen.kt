@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -211,7 +212,7 @@ fun ResultScreen(
                             ) {
                                 Image(
                                     bitmap = frame.asImageBitmap(),
-                                    contentDescription = "Frame ${index + 1}",
+                                    contentDescription = stringResource(R.string.cd_frame, index + 1),
                                     modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(6.dp)),
                                     contentScale = ContentScale.Crop
                                 )
@@ -237,6 +238,7 @@ fun ResultScreen(
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
                     border = BorderStroke(1.dp, BorderSubtle),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     modifier = Modifier.weight(0.9f)
                 ) {
                     Icon(Icons.Default.Close, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -254,6 +256,7 @@ fun ResultScreen(
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentMint),
                         border = BorderStroke(1.dp, AccentMint.copy(alpha = 0.5f)),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                         modifier = Modifier.weight(1.0f)
                     ) {
                         Icon(Icons.Default.Movie, contentDescription = null, modifier = Modifier.size(16.dp), tint = AccentMint)
@@ -272,6 +275,7 @@ fun ResultScreen(
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentMint),
                         border = BorderStroke(1.dp, AccentMint.copy(alpha = 0.5f)),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                         modifier = Modifier.weight(1.0f)
                     ) {
                         Icon(Icons.Default.Videocam, contentDescription = null, modifier = Modifier.size(16.dp), tint = AccentMint)
@@ -289,6 +293,7 @@ fun ResultScreen(
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
                     border = BorderStroke(1.dp, BorderSubtle),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     modifier = Modifier.weight(0.9f)
                 ) {
                     Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -307,6 +312,7 @@ fun ResultScreen(
                         containerColor = AccentEmerald,
                         contentColor = BgObsidian
                     ),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
                     modifier = Modifier.weight(1.1f)
                 ) {
                     Icon(Icons.Default.Done, contentDescription = null, modifier = Modifier.size(16.dp))

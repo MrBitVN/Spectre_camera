@@ -37,7 +37,7 @@ public struct DurationSelector: View {
                     .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Duration \(duration.label)\(isLocked ? ", Pro required" : "")")
+                .accessibilityLabel(isLocked ? String(format: NSLocalizedString("cd_duration_pro", comment: ""), duration.label) : String(format: NSLocalizedString("cd_duration", comment: ""), duration.label))
                 .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : [.isButton])
             }
         }

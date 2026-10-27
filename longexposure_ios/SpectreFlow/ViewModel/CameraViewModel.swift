@@ -309,7 +309,7 @@ public final class CameraViewModel: ObservableObject {
 
     public func exportLoopingWallpaper(onSuccess: @escaping () -> Void, onError: @escaping (String) -> Void) {
         guard !burstKeyframes.isEmpty else {
-            onError("No frames available")
+            onError("Không có khung hình nào")
             return
         }
         triggerHaptic()

@@ -52,6 +52,7 @@ fun LensSelector(
             supportedLenses.forEach { lensRatio ->
                 val isSelected = kotlin.math.abs(currentZoom - lensRatio) < 0.15f
                 val label = if (lensRatio < 1.0f) "0.5x" else "${lensRatio.toInt()}x"
+                val zoomDesc = stringResource(R.string.cd_zoom, label)
 
                 Box(
                     contentAlignment = Alignment.Center,
@@ -62,7 +63,7 @@ fun LensSelector(
                         .clickable { onLensSelected(lensRatio) }
                         .semantics {
                             role = Role.RadioButton
-                            contentDescription = "Zoom level $label"
+                            contentDescription = zoomDesc
                         }
                 ) {
                     Text(
@@ -76,6 +77,7 @@ fun LensSelector(
         }
 
         // Camera flip button
+        val flipCameraDesc = stringResource(R.string.cd_flip_camera)
         IconButton(
             onClick = onFlipCamera,
             modifier = Modifier
@@ -83,7 +85,7 @@ fun LensSelector(
                 .clip(CircleShape)
                 .semantics {
                     role = Role.Button
-                    contentDescription = "Flip camera"
+                    contentDescription = flipCameraDesc
                 }
         ) {
             Icon(

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spectreflow.app.R
 import com.spectreflow.app.ui.theme.AccentEmerald
 import com.spectreflow.app.ui.theme.AccentMint
 import java.util.Locale
@@ -60,18 +62,18 @@ fun RingShutterButton(
         label = "shutter_progress"
     )
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .size(buttonSize)
-            .clip(CircleShape)
-            .semantics {
-                role = Role.Button
-                contentDescription = if (isCapturing)
-                    "Exposing long exposure photo. Hold to continue, release to capture"
-                else
-                    "Shutter button. Press and hold to expose, release to capture"
-            }
+        val shutterCapturingDesc = stringResource(R.string.cd_shutter_capturing)
+        val shutterIdleDesc = stringResource(R.string.cd_shutter_idle)
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier
+                .size(buttonSize)
+                .clip(CircleShape)
+                .semantics {
+                    role = Role.Button
+                    contentDescription = if (isCapturing) shutterCapturingDesc else shutterIdleDesc
+                }
             .pointerInput(enabled) {
                 if (!enabled) return@pointerInput
                 try {

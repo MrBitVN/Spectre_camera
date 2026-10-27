@@ -78,7 +78,7 @@ public struct RingShutterButton: View {
             }
         }
         .contentShape(Circle())
-        .accessibilityLabel(isCapturing ? "Exposing long exposure photo. Hold to continue, release to capture" : "Shutter button. Press and hold to expose, release to capture")
+        .accessibilityLabel(isCapturing ? NSLocalizedString("cd_shutter_capturing", comment: "") : NSLocalizedString("cd_shutter_idle", comment: ""))
         .accessibilityAddTraits(.isButton)
         .gesture(
             DragGesture(minimumDistance: 0)

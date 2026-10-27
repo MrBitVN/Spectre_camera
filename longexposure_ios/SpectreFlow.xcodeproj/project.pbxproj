@@ -257,9 +257,10 @@
 			};
 			buildConfigurationList = A100005029B7F00100000001 /* Build configuration list for PBXProject "SpectreFlow" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = vi;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				vi,
 				en,
 				Base,
 			);

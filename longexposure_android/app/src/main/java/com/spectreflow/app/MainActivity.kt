@@ -403,9 +403,9 @@ class MainActivity : ComponentActivity() {
                 putExtra(Intent.EXTRA_STREAM, contentUri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(shareIntent, "Share Long Exposure Photo"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_photo_title)))
         } catch (e: Exception) {
-            Toast.makeText(this, "Could not prepare share file", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.share_prep_error), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -416,14 +416,14 @@ class MainActivity : ComponentActivity() {
                 putExtra(Intent.EXTRA_STREAM, videoUri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(shareIntent, "Share Companion Video"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_video_title)))
         } catch (e: Exception) {
-            Toast.makeText(this, "Could not share video", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.share_video_error), Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun applyLocale(language: AppLanguage) {
-        val locale = Locale(language.code)
+        val locale = Locale("vi", "VN")
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)

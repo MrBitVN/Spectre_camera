@@ -58,6 +58,7 @@ fun ModeSelector(
                 LongExposureMode.LIGHT_TRAILS -> stringResource(R.string.mode_light_trails)
                 LongExposureMode.VANISH -> stringResource(R.string.mode_vanish)
             }
+            val captureModeDesc = stringResource(R.string.cd_capture_mode, titleText)
 
             Box(
                 modifier = Modifier
@@ -69,7 +70,7 @@ fun ModeSelector(
                     .padding(horizontal = 10.dp, vertical = 7.dp)
                     .semantics {
                         role = Role.RadioButton
-                        contentDescription = "Capture Mode: $titleText"
+                        contentDescription = captureModeDesc
                     },
                 contentAlignment = Alignment.Center
             ) {

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <string>vi</string>
     <key>CFBundleDisplayName</key>
     <string>SpectreFlow</string>
     <key>CFBundleExecutable</key>
@@ -23,11 +23,11 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSCameraUsageDescription</key>
-    <string>SpectreFlow requires camera access to capture burst frames for computational long exposure photography.</string>
+    <string>SpectreFlow cần quyền truy cập máy ảnh để chụp chuỗi khung hình liên tiếp phục vụ thuật toán phơi sáng dài AI.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>SpectreFlow needs permission to save blended long exposure photos directly to your Photo Library.</string>
+    <string>SpectreFlow cần quyền để lưu ảnh và video phơi sáng dài trực tiếp vào Album Ảnh của bạn.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>SpectreFlow accesses your Photo Library to export high-resolution photos and manage long exposure captures.</string>
+    <string>SpectreFlow truy cập Album Ảnh để xuất ảnh chất lượng cao và lưu ảnh phơi sáng dài.</string>
     <key>UILaunchScreen</key>
     <dict>
         <key>UIColorName</key>

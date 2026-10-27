@@ -176,7 +176,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (duration.isProOnly && !_uiState.value.settings.isProUnlocked) {
                 captureState.set(CaptureState.IDLE)
                 _uiState.value = _uiState.value.copy(
-                    hintMessage = "SpectreFlow Pro required for ${duration.seconds}s exposure"
+                    hintMessage = getApplication<Application>().getString(R.string.hint_pro_required, duration.seconds)
                 )
                 return false
             }
@@ -207,7 +207,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 captureProgress = 0f,
                 elapsedSeconds = 0f,
                 hintMessage = null,
-                statusMessage = "Capturing burst frames…"
+                statusMessage = getApplication<Application>().getString(R.string.capturing)
             )
             return true
         } catch (t: Throwable) {
@@ -325,7 +325,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 captureProgress = 0f,
                 elapsedSeconds = 0f,
                 currentScreen = AppScreen.CAMERA,
-                hintMessage = "Hold longer to capture (min 1s)"
+                hintMessage = getApplication<Application>().getString(R.string.hint_hold_longer)
             )
         } else {
             finalizeCapture()
@@ -345,7 +345,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(
             isCapturing = false,
             currentScreen = AppScreen.PROCESSING,
-            statusMessage = "Aligning & blending long exposure…",
+            statusMessage = getApplication<Application>().getString(R.string.blending),
             processingProgress = 0.5f,
             hintMessage = null
         )
@@ -383,7 +383,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = _uiState.value.copy(
                     currentScreen = AppScreen.CAMERA,
                     isCapturing = false,
-                    hintMessage = "Processing failed: ${t.localizedMessage ?: "Unknown error"}"
+                    hintMessage = "Xử lý thất bại: ${t.localizedMessage ?: "Lỗi không xác định"}"
                 )
                 showCrashDialog(
                     title = "Lỗi tổng hợp phơi sáng",

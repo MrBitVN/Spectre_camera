@@ -74,36 +74,6 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Language Setting
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(NSLocalizedString("setting_language", comment: ""))
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(.textPrimary)
-
-                            HStack(spacing: 12) {
-                                ForEach(AppLanguage.allCases) { lang in
-                                    let isSelected = settings.language == lang
-                                    Button {
-                                        settings.language = lang
-                                    } label: {
-                                        Text(lang.displayName)
-                                            .font(.system(size: 13, weight: isSelected ? .bold : .normal))
-                                            .foregroundColor(isSelected ? .accentEmerald : .textSecondary)
-                                            .padding(.horizontal, 14)
-                                            .padding(.vertical, 8)
-                                            .background(isSelected ? Color.accentEmerald.opacity(0.18) : Color.bgCard)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(isSelected ? Color.accentEmerald : Color.borderSubtle, lineWidth: 1)
-                                            )
-                                    }
-                                }
-                            }
-                        }
-
-                        Divider().background(Color.borderSubtle)
-
                         // Custom App Icon Themes
                         VStack(alignment: .leading, spacing: 8) {
                             Text(NSLocalizedString("setting_app_icon", comment: ""))

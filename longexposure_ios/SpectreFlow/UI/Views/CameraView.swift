@@ -40,7 +40,7 @@ public struct CameraView: View {
                             .background(Color.bgSurface.opacity(0.85))
                             .clipShape(Circle())
                     }
-                    .accessibilityLabel("Settings")
+                    .accessibilityLabel(NSLocalizedString("cd_settings", comment: ""))
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 10)

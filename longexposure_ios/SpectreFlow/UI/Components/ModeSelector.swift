@@ -35,7 +35,7 @@ public struct ModeSelector: View {
                         .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Capture mode: \(titleText)")
+                .accessibilityLabel(String(format: NSLocalizedString("cd_capture_mode", comment: ""), titleText))
                 .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : [.isButton])
             }
         }
