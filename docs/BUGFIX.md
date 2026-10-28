@@ -152,3 +152,26 @@ In Android graphics architecture, an input `Surface` returned by `MediaCodec.cre
    - Result: App transitions cleanly from capturing ring -> processing indicator -> result review screen without crashing.
 
 
+
+
+## Bug 4: Gallery Thumbnail Disconnect and "No photos captured yet" False Alert (Android & iOS)
+
+### 1. Diagnosis & Exact Location
+- **Android Thumbnail Source**: `CameraScreen.kt` (lines 280-285) was displaying `uiState.lastSavedThumbnail`, which was backed by an ephemeral in-memory `Bitmap?` set in `MainViewModel.kt` during burst finalization.
+- **Android Alert Source**: `MainViewModel.kt:onOpenResultViewer()` was checking `if (_uiState.value.resultBitmap != null)`. When the user discarded a photo, finished viewing, or restarted the application, `resultBitmap` was nullified (or never initialized on cold start), triggering the orange alert banner:
+  `"No photos captured yet"` (`R.string.hint_no_photos_yet`).
+- **iOS Disconnect**: `CameraViewModel.swift` lines 156-162 checked `if resultImage != nil`. When discarded or saved, `resultImage` was cleared to `nil`, while `lastSavedThumbnail` was an in-memory reference that did not reflect actual photo library assets or cold start state.
+
+### 2. Root Cause
+The thumbnail and the viewer did not share a single source of truth. The thumbnail referenced an ephemeral in-memory capture buffer, while the viewer action checked an in-memory review bitmap that was wiped on discard or review completion, and neither queried persistent storage (Android `MediaStore` / iOS `PHAsset`).
+
+### 3. Solution & Architecture
+- **Unified Repository**:
+  - Android: Created `PhotoRepository.kt` querying `MediaStore.Images.Media.EXTERNAL_CONTENT_URI` filtered by `RELATIVE_PATH LIKE 'Pictures/SpectreFlow%'` and `IS_PENDING = 0`, sorted by `DATE_ADDED DESC`. Registered a `ContentObserver` for real-time external synchronization.
+  - iOS: Created `PhotoRepository.swift` querying the `"SpectreFlow"` `PHAssetCollection` sorted by `creationDate DESC` and registered as `PHPhotoLibraryChangeObserver`.
+  - Saving: Always saved to the `SpectreFlow` album with `IS_PENDING = 1` during write and `IS_PENDING = 0` on completion.
+- **Permissions**:
+  - Handled `READ_MEDIA_IMAGES` (API 33+) and `READ_EXTERNAL_STORAGE` (API <= 32) on Android with a dedicated `StoragePermissionDialog` rationale and grant button.
+- **Full-Screen Gallery Viewer**:
+  - Android: `GalleryViewerScreen.kt` with `HorizontalPager`, Back navigation, photo counter (`X of Y`), timestamp, Share (`ACTION_SEND`), and Delete with confirmation dialog and `MediaStore` deletion.
+  - iOS: `GalleryView.swift` with `TabView(PageTabViewStyle)`, Back navigation, counter, timestamp, Share (`UIActivityViewController`), and Delete (`PHAssetChangeRequest.deleteAssets`).

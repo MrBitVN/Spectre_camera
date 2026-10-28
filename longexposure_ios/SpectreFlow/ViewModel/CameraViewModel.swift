@@ -8,6 +8,7 @@ public enum ScreenState {
     case camera
     case processing
     case result
+    case gallery
 }
 
 public enum CaptureState {
@@ -23,6 +24,7 @@ public final class CameraViewModel: ObservableObject {
     public let cameraService = CameraService()
     public let stabilityDetector = MotionStabilityDetector()
     public let proManager = ProSubscriptionManager.shared
+    public let photoRepository = PhotoRepository.shared
     private let blenderEngine = FrameBlenderEngine()
     private let sceneDetector = HeuristicSceneDetector()
     private let videoWriter = CompanionVideoWriter()
@@ -64,6 +66,13 @@ public final class CameraViewModel: ObservableObject {
         if !seen {
             self.showOnboarding = true
         }
+
+        photoRepository.$latestThumbnail
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] thumb in
+                self?.lastSavedThumbnail = thumb
+            }
+            .store(in: &cancellables)
     }
 
     private func setupSubscriptions() {
@@ -154,10 +163,10 @@ public final class CameraViewModel: ObservableObject {
     }
 
     public func openResultViewer() {
-        if resultImage != nil {
-            screenState = .result
+        if photoRepository.photos.isEmpty {
+            hintMessage = NSLocalizedString("no_photos_yet", comment: "No photos captured yet")
         } else {
-            hintMessage = NSLocalizedString("no_photos_yet", comment: "")
+            screenState = .gallery
         }
     }
 
@@ -289,7 +298,6 @@ public final class CameraViewModel: ObservableObject {
 
             self.companionVideoURL = videoURL
             self.resultImage = finalImage
-            self.lastSavedThumbnail = finalImage
             self.processingProgress = 1.0
             self.screenState = .result
             self.captureState = .result
@@ -300,9 +308,17 @@ public final class CameraViewModel: ObservableObject {
         Task {
             do {
                 try await PhotoLibrarySaver.saveImage(image, pairedVideoURL: companionVideoURL)
-                onSuccess()
+                await MainActor.run {
+                    self.photoRepository.fetchPhotos()
+                    self.screenState = .camera
+                    self.resultImage = nil
+                    self.captureState = .idle
+                    onSuccess()
+                }
             } catch {
-                onError(error.localizedDescription)
+                await MainActor.run {
+                    onError(error.localizedDescription)
+                }
             }
         }
     }

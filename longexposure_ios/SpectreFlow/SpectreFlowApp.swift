@@ -59,6 +59,8 @@ struct SpectreFlowApp: App {
                             ActivityView(activityItems: shareItems)
                         }
                     }
+                case .gallery:
+                    GalleryView(viewModel: viewModel)
                 }
 
                 if viewModel.showPermissionRationale {

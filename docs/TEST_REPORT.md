@@ -26,7 +26,11 @@
 | **TC-12** | **Stability Indicator State** | Test stationary phone vs handheld | Gyro variance < 0.08: brackets turn green with `STABLE` badge; micro-tremor detected: turns amber with `SHAKY` badge | **PASS** | `StabilityIndicator.kt`<br>`StabilityIndicator.swift` |
 | **TC-13** | **Tutorials Screen Layout** | Open Settings -> Tap Tutorials | Displays back button, title "Tutorials", intro subtitle, and 3 rounded cards with bold title phrases matching reference UI | **PASS** | `TutorialsScreen.kt`<br>`TutorialsView.swift` |
 | **TC-14** | **Tutorial Step Detail** | Tap any of the 3 tutorial cards | Opens modal sheet showing 4 step-by-step instructions with recommended mode, duration, tripod advice, and hold instructions | **PASS** | `TutorialsScreen.kt:TutorialDetailModal`<br>`TutorialsView.swift:TutorialDetailSheet` |
-| **TC-15** | **Last Photo Thumbnail Viewer** | Tap bottom-left thumbnail | If a result photo exists, navigates directly to Result Screen; if none, displays non-blocking toast `"No photos captured yet"` | **PASS** | `MainViewModel.kt:onOpenResultViewer`<br>`CameraViewModel.swift:openResultViewer` |
+| **TC-15** | **Cold Start / Empty State** | Launch app on clean install, tap thumbnail | Thumbnail displays placeholder icon, tap shows transient hint `"No photos captured yet"`, remains on camera | **PASS** | `HoldToExposeTest.kt:testPhotoRepositoryViewerConsistency`<br>`HoldToExposeTests.swift:testPhotoRepositoryAndGallerySync` |
+| **TC-16** | **Capture & Save -> Sync** | Capture long exposure and save | Photo written with `IS_PENDING = 0` to `Pictures/SpectreFlow`, repository updates immediately, thumbnail updates | **PASS** | `PhotoRepository.kt:queryPhotos`<br>`PhotoRepository.swift:fetchPhotos` |
+| **TC-17** | **Open Gallery Viewer** | Tap thumbnail with >= 1 photo | Opens full-screen gallery viewer at latest photo (index 0), counter shows `"1 of N"`, formatted date timestamp | **PASS** | `GalleryViewerScreen.kt`<br>`GalleryView.swift` |
+| **TC-18** | **Horizontal Swipe Navigation** | Swipe left/right in gallery | Pager smoothly transitions between photos in chronological descending order | **PASS** | `GalleryViewerScreen.kt:HorizontalPager`<br>`GalleryView.swift:TabView` |
+| **TC-19** | **Delete Photo from Viewer** | Tap Delete -> confirm dialog | Photo deleted from MediaStore / Photos library, list refreshed; if empty, automatically returns to camera | **PASS** | `PhotoRepository.kt:deletePhoto`<br>`PhotoRepository.swift:deletePhoto` |
 
 ---
 

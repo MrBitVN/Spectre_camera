@@ -22,7 +22,9 @@ import com.spectreflow.app.sensor.StabilityState
 import com.spectreflow.app.settings.AppSettingsManager
 import com.spectreflow.app.settings.AppSettingsState
 import com.spectreflow.app.settings.CaptureDuration
+import com.spectreflow.app.storage.AppPhoto
 import com.spectreflow.app.storage.MediaSaver
+import com.spectreflow.app.storage.PhotoRepository
 import com.spectreflow.app.video.CompanionVideoRecorder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -48,7 +50,8 @@ enum class AppScreen {
     PROCESSING,
     RESULT,
     SETTINGS,
-    ONBOARDING
+    ONBOARDING,
+    GALLERY_VIEWER
 }
 
 data class UiState(
@@ -72,6 +75,8 @@ data class UiState(
     val isFrontCamera: Boolean = false,
     val savedUri: Uri? = null,
     val showPermissionDialog: Boolean = false,
+    val showStoragePermissionDialog: Boolean = false,
+    val hasStoragePermission: Boolean = false,
     val isLimitedAccess: Boolean = false,
     val exposureCompensation: Float = 0f,
     val lastSavedThumbnail: Bitmap? = null
@@ -87,6 +92,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val settingsManager = AppSettingsManager(application)
     val billingService: BillingService = StubBillingService(settingsManager)
     private val mediaSaver = MediaSaver(application)
+    val photoRepository = PhotoRepository(application)
     private val blenderEngine = FrameBlenderEngine()
     private val stabilityDetector = StabilityDetector(application)
     private val sceneDetector = HeuristicSceneDetector()
@@ -119,6 +125,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         stabilityDetector.startListening()
+        viewModelScope.launch {
+            photoRepository.photos.collect { photoList ->
+                val first = photoList.firstOrNull()
+                if (first != null) {
+                    val thumb = photoRepository.loadThumbnail(first.uri)
+                    _uiState.value = _uiState.value.copy(lastSavedThumbnail = thumb)
+                } else {
+                    _uiState.value = _uiState.value.copy(lastSavedThumbnail = null)
+                }
+            }
+        }
     }
 
     fun onPermissionGranted(isLimited: Boolean = false) {
@@ -441,6 +458,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = mediaSaver.saveBitmapToGallery(bitmap)
             result.onSuccess { uri ->
                 _uiState.value = _uiState.value.copy(savedUri = uri)
+                photoRepository.refresh()
                 onSuccess(uri)
             }.onFailure { error ->
                 onError(error.localizedMessage ?: "Failed to save photo")
@@ -553,12 +571,46 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onOpenResultViewer() {
-        if (_uiState.value.resultBitmap != null) {
-            _uiState.value = _uiState.value.copy(currentScreen = AppScreen.RESULT)
+        if (!_uiState.value.hasStoragePermission) {
+            _uiState.value = _uiState.value.copy(showStoragePermissionDialog = true)
+            return
+        }
+        val count = photoRepository.photos.value.size
+        if (count > 0) {
+            _uiState.value = _uiState.value.copy(currentScreen = AppScreen.GALLERY_VIEWER)
         } else {
             _uiState.value = _uiState.value.copy(
                 hintMessage = getApplication<Application>().getString(R.string.no_photos_yet)
             )
+        }
+    }
+
+    fun onStoragePermissionGranted() {
+        _uiState.value = _uiState.value.copy(
+            hasStoragePermission = true,
+            showStoragePermissionDialog = false
+        )
+        photoRepository.refresh()
+    }
+
+    fun onStoragePermissionDenied() {
+        _uiState.value = _uiState.value.copy(
+            hasStoragePermission = false,
+            showStoragePermissionDialog = true
+        )
+    }
+
+    fun onDismissStoragePermissionDialog() {
+        _uiState.value = _uiState.value.copy(showStoragePermissionDialog = false)
+    }
+
+    fun onCloseGalleryViewer() {
+        _uiState.value = _uiState.value.copy(currentScreen = AppScreen.CAMERA)
+    }
+
+    fun onDeleteGalleryPhoto(photo: AppPhoto) {
+        viewModelScope.launch {
+            photoRepository.deletePhoto(photo)
         }
     }
 
@@ -582,5 +634,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         stabilityDetector.stopListening()
         blenderEngine.reset()
         videoRecorder?.cancel()
+        photoRepository.stopObserving()
     }
 }

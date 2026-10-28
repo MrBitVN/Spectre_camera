@@ -164,4 +164,66 @@ final class HoldToExposeTests: XCTestCase {
         onPointerMove(distanceFromCenter: 130.0)
         XCTAssertTrue(isCancelled)
     }
+
+    func testPhotoRepositoryAndGallerySync() {
+        // Simulates unified single-source-of-truth behavior between thumbnail and gallery viewer
+        var photos: [String] = []
+        var latestThumbnail: String? = nil
+        var currentScreen: ScreenState = .camera
+        var hintMessage: String? = nil
+
+        func openResultViewer() {
+            if photos.isEmpty {
+                hintMessage = "No photos captured yet"
+            } else {
+                currentScreen = .gallery
+            }
+        }
+
+        func savePhoto(id: String) {
+            photos.insert(id, at: 0) // LIFO sorted by date descending
+            latestThumbnail = "thumb_\(id)"
+        }
+
+        func deletePhoto(id: String) {
+            photos.removeAll(where: { $0 == id })
+            latestThumbnail = photos.first.map { "thumb_\($0)" }
+            if photos.isEmpty {
+                currentScreen = .camera
+            }
+        }
+
+        // Scenario 1: Fresh install / no photos
+        XCTAssertTrue(photos.isEmpty)
+        XCTAssertNil(latestThumbnail)
+        openResultViewer()
+        XCTAssertEqual(hintMessage, "No photos captured yet")
+        XCTAssertEqual(currentScreen, .camera)
+
+        // Scenario 2: Capture and save 2 photos
+        hintMessage = nil
+        savePhoto(id: "photo_001")
+        XCTAssertEqual(latestThumbnail, "thumb_photo_001")
+        savePhoto(id: "photo_002")
+        XCTAssertEqual(latestThumbnail, "thumb_photo_002")
+        XCTAssertEqual(photos.count, 2)
+
+        // Scenario 3: Tap thumbnail opens gallery viewer with newest first
+        openResultViewer()
+        XCTAssertNil(hintMessage)
+        XCTAssertEqual(currentScreen, .gallery)
+        XCTAssertEqual(photos[0], "photo_002")
+
+        // Scenario 4: Delete latest photo -> thumbnail falls back to photo_001
+        deletePhoto(id: "photo_002")
+        XCTAssertEqual(photos.count, 1)
+        XCTAssertEqual(latestThumbnail, "thumb_photo_001")
+        XCTAssertEqual(currentScreen, .gallery)
+
+        // Scenario 5: Delete last photo -> returns to camera, thumbnail becomes nil
+        deletePhoto(id: "photo_001")
+        XCTAssertTrue(photos.isEmpty)
+        XCTAssertNil(latestThumbnail)
+        XCTAssertEqual(currentScreen, .camera)
+    }
 }

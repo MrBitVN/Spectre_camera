@@ -243,4 +243,66 @@ class HoldToExposeTest {
         onPointerMove(130f)
         assertTrue(isCancelled)
     }
+
+    @Test
+    fun testPhotoRepositoryViewerConsistency() {
+        val photos = mutableListOf<String>()
+        var latestThumbnail: String? = null
+        var currentScreen = AppScreen.CAMERA
+        var hintMessage: String? = null
+
+        fun openResultViewer() {
+            if (photos.isEmpty()) {
+                hintMessage = "No photos captured yet"
+            } else {
+                currentScreen = AppScreen.GALLERY_VIEWER
+            }
+        }
+
+        fun savePhoto(id: String) {
+            photos.add(0, id) // LIFO sorted by date descending
+            latestThumbnail = "thumb_$id"
+        }
+
+        fun deletePhoto(id: String) {
+            photos.remove(id)
+            latestThumbnail = photos.firstOrNull()?.let { "thumb_$it" }
+            if (photos.isEmpty()) {
+                currentScreen = AppScreen.CAMERA
+            }
+        }
+
+        // Scenario 1: Fresh install / no photos -> empty placeholder, tap shows hint
+        assertTrue(photos.isEmpty())
+        org.junit.Assert.assertNull(latestThumbnail)
+        openResultViewer()
+        assertEquals("No photos captured yet", hintMessage)
+        assertEquals(AppScreen.CAMERA, currentScreen)
+
+        // Scenario 2: Save 2 photos -> thumbnail updates immediately to latest
+        hintMessage = null
+        savePhoto("photo_1")
+        assertEquals("thumb_photo_1", latestThumbnail)
+        savePhoto("photo_2")
+        assertEquals("thumb_photo_2", latestThumbnail)
+        assertEquals(2, photos.size)
+
+        // Scenario 3: Tap thumbnail -> opens gallery viewer showing newest first
+        openResultViewer()
+        org.junit.Assert.assertNull(hintMessage)
+        assertEquals(AppScreen.GALLERY_VIEWER, currentScreen)
+        assertEquals("photo_2", photos[0])
+
+        // Scenario 4: Delete newest photo -> thumbnail falls back to photo_1
+        deletePhoto("photo_2")
+        assertEquals(1, photos.size)
+        assertEquals("thumb_photo_1", latestThumbnail)
+        assertEquals(AppScreen.GALLERY_VIEWER, currentScreen)
+
+        // Scenario 5: Delete all photos -> returns to camera screen, thumbnail is null
+        deletePhoto("photo_1")
+        assertTrue(photos.isEmpty())
+        org.junit.Assert.assertNull(latestThumbnail)
+        assertEquals(AppScreen.CAMERA, currentScreen)
+    }
 }

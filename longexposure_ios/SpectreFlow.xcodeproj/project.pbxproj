@@ -48,6 +48,8 @@
 		A100007429B7F00100000001 /* TopBarControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007529B7F00100000001 /* TopBarControls.swift */; };
 		A100007629B7F00100000001 /* FloatingZoomPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007729B7F00100000001 /* FloatingZoomPill.swift */; };
 		A100007829B7F00100000001 /* TutorialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007929B7F00100000001 /* TutorialsView.swift */; };
+		A100007A29B7F00100000001 /* PhotoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007B29B7F00100000001 /* PhotoRepository.swift */; };
+		A100007C29B7F00100000001 /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007D29B7F00100000001 /* GalleryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,8 @@
 		A100007529B7F00100000001 /* TopBarControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/TopBarControls.swift; sourceTree = "<group>"; };
 		A100007729B7F00100000001 /* FloatingZoomPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/FloatingZoomPill.swift; sourceTree = "<group>"; };
 		A100007929B7F00100000001 /* TutorialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/TutorialsView.swift; sourceTree = "<group>"; };
+		A100007B29B7F00100000001 /* PhotoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage/PhotoRepository.swift; sourceTree = "<group>"; };
+		A100007D29B7F00100000001 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/GalleryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -174,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				A100001829B7F00100000001 /* PhotoLibrarySaver.swift */,
+				A100007B29B7F00100000001 /* PhotoRepository.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 				A100007529B7F00100000001 /* TopBarControls.swift */,
 				A100007729B7F00100000001 /* FloatingZoomPill.swift */,
 				A100007929B7F00100000001 /* TutorialsView.swift */,
+				A100007D29B7F00100000001 /* GalleryView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -345,6 +351,8 @@
 				A100007429B7F00100000001 /* TopBarControls.swift in Sources */,
 				A100007629B7F00100000001 /* FloatingZoomPill.swift in Sources */,
 				A100007829B7F00100000001 /* TutorialsView.swift in Sources */,
+				A100007A29B7F00100000001 /* PhotoRepository.swift in Sources */,
+				A100007C29B7F00100000001 /* GalleryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

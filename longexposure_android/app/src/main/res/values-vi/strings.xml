@@ -100,6 +100,10 @@
     <string name="permission_camera_title">Camera Permission Required</string>
     <string name="permission_camera_desc">SpectreFlow needs camera access to capture burst frames for computational long exposure blending.</string>
     <string name="permission_grant">Grant Camera Permission</string>
+    <string name="permission_storage_title">Storage Permission Required</string>
+    <string name="permission_storage_desc">SpectreFlow requires permission to access your photo library to load and browse your captured long exposure photos.</string>
+    <string name="permission_storage_grant">Grant Storage Permission</string>
+    <string name="action_not_now">Not Now</string>
 
     <!-- Error Dialog -->
     <string name="error_dialog_title">Application Error Occurred</string>

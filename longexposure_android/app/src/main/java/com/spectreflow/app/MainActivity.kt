@@ -57,10 +57,12 @@ import com.spectreflow.app.camera.CameraXManager
 import com.spectreflow.app.settings.AppLanguage
 import com.spectreflow.app.ui.screens.CameraScreen
 import com.spectreflow.app.ui.screens.OnboardingScreen
+import com.spectreflow.app.ui.screens.GalleryViewerScreen
 import com.spectreflow.app.ui.screens.PermissionRationaleDialog
 import com.spectreflow.app.ui.screens.ProcessingScreen
 import com.spectreflow.app.ui.screens.ResultScreen
 import com.spectreflow.app.ui.screens.SettingsScreen
+import com.spectreflow.app.ui.screens.StoragePermissionDialog
 import com.spectreflow.app.ui.screens.TutorialsScreen
 import com.spectreflow.app.ui.theme.AccentEmerald
 import com.spectreflow.app.ui.theme.BgObsidian
@@ -79,6 +81,22 @@ class MainActivity : ComponentActivity() {
                 viewModel.onPermissionGranted(isLimited = false)
             } else {
                 viewModel.onPermissionDenied()
+            }
+        }
+
+    private val storagePermission: String
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+    private val storagePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                viewModel.onStoragePermissionGranted()
+            } else {
+                viewModel.onStoragePermissionDenied()
             }
         }
 
@@ -107,6 +125,7 @@ class MainActivity : ComponentActivity() {
         cameraManager = CameraXManager(this)
 
         checkCameraPermission()
+        checkStoragePermission()
 
         setContent {
             SpectreFlowTheme {
@@ -117,6 +136,7 @@ class MainActivity : ComponentActivity() {
                     val uiState by viewModel.uiState.collectAsState()
                     val stability by viewModel.stabilityState.collectAsState()
                     val crashInfo by viewModel.crashDialog.collectAsState()
+                    val galleryPhotos by viewModel.photoRepository.photos.collectAsState()
                     var previewViewInstance by remember { mutableStateOf<PreviewView?>(null) }
 
                     // Apply localized language configuration if changed
@@ -280,12 +300,33 @@ class MainActivity : ComponentActivity() {
                                 onBack = { viewModel.onCloseSettings() }
                             )
                         }
+
+                        AppScreen.GALLERY_VIEWER -> {
+                            GalleryViewerScreen(
+                                photos = galleryPhotos,
+                                photoRepository = viewModel.photoRepository,
+                                onBack = { viewModel.onCloseGalleryViewer() },
+                                onSharePhoto = { uri -> shareUri(uri) },
+                                onDeletePhoto = { photo -> viewModel.onDeleteGalleryPhoto(photo) }
+                            )
+                        }
                     }
 
                     if (uiState.showPermissionDialog) {
                         PermissionRationaleDialog(
                             onGrantClick = {
                                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                            }
+                        )
+                    }
+
+                    if (uiState.showStoragePermissionDialog) {
+                        StoragePermissionDialog(
+                            onGrantClick = {
+                                storagePermissionLauncher.launch(storagePermission)
+                            },
+                            onDismiss = {
+                                viewModel.onDismissStoragePermissionDialog()
                             }
                         )
                     }
@@ -375,6 +416,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun checkStoragePermission() {
+        when {
+            ContextCompat.checkSelfPermission(this, storagePermission) == PackageManager.PERMISSION_GRANTED -> {
+                viewModel.onStoragePermissionGranted()
+            }
+            else -> {
+                storagePermissionLauncher.launch(storagePermission)
+            }
+        }
+    }
+
     private fun setupCamera(previewView: PreviewView) {
         val manager = cameraManager ?: return
         manager.initialize(this, previewView.surfaceProvider) {
@@ -427,6 +479,19 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_video_title)))
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.share_video_error), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareUri(uri: Uri) {
+        try {
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/jpeg"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_photo_title)))
+        } catch (e: Exception) {
+            Toast.makeText(this, getString(R.string.share_prep_error), Toast.LENGTH_SHORT).show()
         }
     }
 

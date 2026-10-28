@@ -127,3 +127,8 @@
 "cd_exposure_icon" = "Exposure compensation slider";
 "cd_camera_active" = "Camera active indicator";
 "cd_recent_thumbnail" = "View last long exposure photo";
+"gallery_title" = "SpectreFlow Gallery";
+"gallery_delete_confirm_title" = "Delete Photo?";
+"gallery_delete_confirm_message" = "This photo will be permanently deleted from your library.";
+"action_delete" = "Delete";
+"action_cancel" = "Cancel";
