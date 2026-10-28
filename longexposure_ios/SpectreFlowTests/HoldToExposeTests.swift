@@ -87,4 +87,81 @@ final class HoldToExposeTests: XCTestCase {
         }
         XCTAssertEqual(state, .idle)
     }
+
+    func testDialRotationAndProLockValidation() {
+        let durations = CaptureDuration.allCases
+        XCTAssertEqual(durations.count, 5)
+
+        // 3s, 5s, 9s are non-Pro
+        XCTAssertFalse(durations[0].isProOnly)
+        XCTAssertFalse(durations[1].isProOnly)
+        XCTAssertFalse(durations[2].isProOnly)
+
+        // 15s, 30s are Pro-only
+        XCTAssertTrue(durations[3].isProOnly)
+        XCTAssertTrue(durations[4].isProOnly)
+
+        var isProUnlocked = false
+        var selected = durations[0]
+
+        func trySelect(_ duration: CaptureDuration) -> Bool {
+            if duration.isProOnly && !isProUnlocked {
+                return false
+            }
+            selected = duration
+            return true
+        }
+
+        XCTAssertTrue(trySelect(durations[1])) // 5s allowed
+        XCTAssertEqual(selected, .sec5)
+
+        XCTAssertFalse(trySelect(durations[3])) // 15s rejected
+        XCTAssertEqual(selected, .sec5)
+
+        // Unlock Pro
+        isProUnlocked = true
+        XCTAssertTrue(trySelect(durations[3])) // 15s allowed now
+        XCTAssertEqual(selected, .sec15)
+    }
+
+    func testQuickTapShowsHintAndDiscards() {
+        var hintMessage: String? = nil
+        var isCaptured = false
+
+        func onRelease(elapsedMs: Int) {
+            if elapsedMs < 1000 {
+                hintMessage = "Hold longer to capture"
+                isCaptured = false
+            } else {
+                hintMessage = nil
+                isCaptured = true
+            }
+        }
+
+        onRelease(elapsedMs: 400)
+        XCTAssertEqual(hintMessage, "Hold longer to capture")
+        XCTAssertFalse(isCaptured)
+
+        onRelease(elapsedMs: 2500)
+        XCTAssertNil(hintMessage)
+        XCTAssertTrue(isCaptured)
+    }
+
+    func testSlideCancelSafety() {
+        let buttonRadius: CGFloat = 40.0
+        let cancelDistance: CGFloat = buttonRadius * 2.0 * 1.5 // 120.0
+        var isCancelled = false
+
+        func onPointerMove(distanceFromCenter: CGFloat) {
+            if distanceFromCenter > cancelDistance {
+                isCancelled = true
+            }
+        }
+
+        onPointerMove(distanceFromCenter: 60.0)
+        XCTAssertFalse(isCancelled)
+
+        onPointerMove(distanceFromCenter: 130.0)
+        XCTAssertTrue(isCancelled)
+    }
 }

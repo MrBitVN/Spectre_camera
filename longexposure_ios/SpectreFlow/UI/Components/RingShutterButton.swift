@@ -1,10 +1,12 @@
 import SwiftUI
 
-/// Press-and-Hold Shutter Button for Long Exposure (SwiftUI).
-/// - Press down: triggers burst capture and haptic
-/// - Hold: fills circular progress track toward max duration cap, displays live 00:xx timer
-/// - Release: triggers exposure synthesis (if hold >= 1s)
-/// - Drag far outside (> 75pt): safely cancels capture
+/**
+ * Large dual-ring shutter button matching reference design:
+ * - Two concentric green rings: outer ring + inner ring.
+ * - Press and hold to expose, release to capture.
+ * - While holding: inner ring pulses, outer ring arc fills toward cap, elapsed time "00:07" displayed.
+ * - Tactile haptic pulse on press down and release.
+ */
 public struct RingShutterButton: View {
     public let isCapturing: Bool
     public let progress: Float
@@ -15,6 +17,8 @@ public struct RingShutterButton: View {
 
     @State private var isTouching: Bool = false
     @State private var didCancel: Bool = false
+    @State private var isPulsing: Bool = false
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     public init(
         isCapturing: Bool,
@@ -34,81 +38,84 @@ public struct RingShutterButton: View {
 
     public var body: some View {
         ZStack {
-            // Background Track
-            Circle()
-                .stroke(Color.accentEmerald.opacity(0.25), lineWidth: 5)
-                .frame(width: 86, height: 86)
-
-            // Active Progress Arc
+            // 1. Outer Ring
             if isCapturing {
+                // Dim background track
+                Circle()
+                    .stroke(Color.accentEmerald.opacity(0.25), lineWidth: 3.5)
+                    .frame(width: 80, height: 80)
+
+                // Active progress arc
                 Circle()
                     .trim(from: 0, to: CGFloat(progress))
                     .stroke(
                         Color.accentEmerald,
-                        style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .frame(width: 86, height: 86)
+                    .frame(width: 80, height: 80)
                     .animation(.linear(duration: 0.08), value: progress)
             } else {
                 Circle()
-                    .stroke(Color.accentEmerald, lineWidth: 5)
-                    .frame(width: 86, height: 86)
+                    .stroke(Color.accentEmerald, lineWidth: 3.5)
+                    .frame(width: 80, height: 80)
             }
 
-            // Inner Core
-            if isCapturing {
-                ZStack {
-                    Circle()
-                        .fill(Color.accentEmerald.opacity(0.22))
-                        .frame(width: 64, height: 64)
+            // 2. Inner Ring
+            Circle()
+                .stroke(Color.accentEmerald, lineWidth: 3.5)
+                .frame(width: 58, height: 58)
+                .scaleEffect(isCapturing && isPulsing ? 1.06 : (isCapturing ? 0.94 : 1.0))
+                .animation(isCapturing ? Animation.easeInOut(duration: 0.65).repeatForever(autoreverses: true) : .default, value: isPulsing)
 
-                    let secondsInt = Int(elapsedSeconds)
-                    let formattedTime = String(format: "00:%02d", secondsInt)
-                    Text(formattedTime)
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white)
-                }
-                .transition(.scale)
-            } else {
-                Circle()
-                    .fill(Color.accentMint)
-                    .frame(width: 58, height: 58)
-                    .transition(.scale)
+            // 3. Center Elapsed Time Display
+            if isCapturing {
+                let secondsInt = Int(elapsedSeconds)
+                let formattedTime = String(format: "00:%02d", secondsInt)
+                Text(formattedTime)
+                    .font(.system(size: 15, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .tracking(0.5)
             }
         }
+        .frame(width: 82, height: 82)
         .contentShape(Circle())
-        .accessibilityLabel(isCapturing ? NSLocalizedString("cd_shutter_capturing", comment: "") : NSLocalizedString("cd_shutter_idle", comment: ""))
-        .accessibilityAddTraits(.isButton)
+        .onChange(of: isCapturing) { capturing in
+            if capturing {
+                isPulsing = true
+            } else {
+                isPulsing = false
+            }
+        }
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     if !isTouching {
                         isTouching = true
                         didCancel = false
+                        impactFeedback.impactOccurred()
                         onPressStart()
                     } else if !didCancel {
                         let distance = hypot(value.translation.width, value.translation.height)
-                        if distance > 75 {
+                        if distance > 70 {
                             didCancel = true
+                            impactFeedback.impactOccurred()
                             onPressCancel()
                         }
                     }
                 }
-                .onEnded { value in
+                .onEnded { _ in
                     guard isTouching else { return }
                     isTouching = false
+                    impactFeedback.impactOccurred()
                     if didCancel {
-                        didCancel = false
+                        onPressCancel()
                     } else {
-                        let distance = hypot(value.translation.width, value.translation.height)
-                        if distance > 75 {
-                            onPressCancel()
-                        } else {
-                            onPressRelease()
-                        }
+                        onPressRelease()
                     }
                 }
         )
+        .accessibilityLabel(isCapturing ? NSLocalizedString("cd_shutter_capturing", comment: "") : NSLocalizedString("cd_shutter_idle", comment: ""))
+        .accessibilityAddTraits(.isButton)
     }
 }

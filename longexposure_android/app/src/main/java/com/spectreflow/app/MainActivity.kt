@@ -61,6 +61,7 @@ import com.spectreflow.app.ui.screens.PermissionRationaleDialog
 import com.spectreflow.app.ui.screens.ProcessingScreen
 import com.spectreflow.app.ui.screens.ResultScreen
 import com.spectreflow.app.ui.screens.SettingsScreen
+import com.spectreflow.app.ui.screens.TutorialsScreen
 import com.spectreflow.app.ui.theme.AccentEmerald
 import com.spectreflow.app.ui.theme.BgObsidian
 import com.spectreflow.app.ui.theme.SpectreFlowTheme
@@ -139,8 +140,8 @@ class MainActivity : ComponentActivity() {
 
                     when (uiState.currentScreen) {
                         AppScreen.ONBOARDING -> {
-                            OnboardingScreen(
-                                onDismiss = { viewModel.onDismissOnboarding() }
+                            TutorialsScreen(
+                                onBack = { viewModel.onDismissOnboarding() }
                             )
                         }
 
@@ -157,9 +158,10 @@ class MainActivity : ComponentActivity() {
                                 supportedLenses = uiState.supportedLenses,
                                 currentZoom = uiState.currentZoom,
                                 isFrontCamera = uiState.isFrontCamera,
-                                isLimitedAccess = uiState.isLimitedAccess,
                                 showGrid = uiState.settings.showGrid,
                                 isProUnlocked = uiState.settings.isProUnlocked,
+                                exposureCompensation = uiState.exposureCompensation,
+                                lastSavedThumbnail = uiState.lastSavedThumbnail,
                                 onPreviewViewCreated = { previewView ->
                                     previewViewInstance = previewView
                                     setupCamera(previewView)
@@ -212,6 +214,11 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onModeSelected = { viewModel.onModeSelected(it) },
                                 onDurationSelected = { viewModel.onDurationSelected(it) },
+                                onExposureChanged = { ev ->
+                                    cameraManager?.setExposureCompensation(ev)
+                                    viewModel.onExposureCompensationChanged(ev)
+                                },
+                                onOpenThumbnailViewer = { viewModel.onOpenResultViewer() },
                                 onOpenSettings = { viewModel.onOpenSettings() }
                             )
                         }

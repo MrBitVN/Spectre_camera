@@ -111,6 +111,40 @@
     <string name="toast_error_copied">Error log copied to clipboard</string>
     <string name="action_close">Close</string>
 
+    <!-- Tutorials (Reference Layout) -->
+    <string name="tutorials_title">Tutorials</string>
+    <string name="tutorials_intro">These guides show you the power of the AI-augmented camera:</string>
+    <string name="tutorial_1_title_part1">Take a shot in a crowded place and </string>
+    <string name="tutorial_1_title_bold">make people disappear</string>
+    <string name="tutorial_2_title_part1">Turn a highway into a dazzling </string>
+    <string name="tutorial_2_title_bold">river of light</string>
+    <string name="tutorial_3_title_part1">Get a beautiful </string>
+    <string name="tutorial_3_title_bold">soft water exposure</string>
+    <string name="tutorial_3_title_part2"> of a waterfall</string>
+    <string name="tutorial_1_step1">Select Vanish mode from the top mode picker</string>
+    <string name="tutorial_1_step2">Choose 5s or 9s duration cap on the rotary dial</string>
+    <string name="tutorial_1_step3">Keep the phone steady or use a tripod until the STABLE indicator turns green</string>
+    <string name="tutorial_1_step4">Press and hold the shutter while people walk through the frame</string>
+    <string name="tutorial_2_step1">Select Light Trails mode from the top mode picker</string>
+    <string name="tutorial_2_step2">Set duration to 9s, 15s or 30s on the rotary dial</string>
+    <string name="tutorial_2_step3">Point the camera toward an evening highway or moving traffic</string>
+    <string name="tutorial_2_step4">Press and hold the shutter as vehicles travel past to weave luminous ribbons</string>
+    <string name="tutorial_3_step1">Select Motion Blur mode from the top mode picker</string>
+    <string name="tutorial_3_step2">Set duration to 3s or 5s on the rotary dial</string>
+    <string name="tutorial_3_step3">Frame running streams, ocean surf, or waterfalls</string>
+    <string name="tutorial_3_step4">Press and hold the shutter to blend flowing currents into silky mist</string>
+    <string name="tutorial_detail_title">Guide Details</string>
+    <string name="action_start_shooting">Start Shooting</string>
+
+    <!-- Additional Settings & UI -->
+    <string name="setting_about">About SpectreFlow</string>
+    <string name="setting_about_desc">100% native computational long exposure engine with gyro stability and companion video.</string>
+    <string name="no_photos_yet">No photos captured yet</string>
+    <string name="exposure_compensation">Exposure Compensation</string>
+    <string name="cd_exposure_icon">Exposure compensation slider</string>
+    <string name="cd_camera_active">Camera active indicator</string>
+    <string name="cd_recent_thumbnail">View last long exposure photo</string>
+
     <!-- Accessibility Descriptions -->
     <string name="cd_shutter_capturing">Exposing long exposure photo. Hold to continue, release to capture</string>
     <string name="cd_shutter_idle">Shutter button. Press and hold to expose, release to capture</string>

@@ -46,6 +46,8 @@ public final class CameraViewModel: ObservableObject {
     @Published public var companionVideoURL: URL? = nil
     @Published public var shareSheetPresented: Bool = false
     @Published public var hintMessage: String? = nil
+    @Published public var exposureCompensation: Float = 0.0
+    @Published public var lastSavedThumbnail: UIImage? = nil
 
     private var frameAligner: FrameAligner?
     private var isFirstFrame = true
@@ -134,6 +136,29 @@ public final class CameraViewModel: ObservableObject {
 
     public func selectLens(_ factor: CGFloat) {
         cameraService.setZoomFactor(factor)
+    }
+
+    public func cycleLens() {
+        let lenses = cameraService.supportedLenses
+        guard !lenses.isEmpty else { return }
+        let current = cameraService.currentZoom
+        let currentIndex = lenses.firstIndex(where: { abs($0 - current) < 0.1 }) ?? 0
+        let nextIndex = (currentIndex + 1) % lenses.count
+        let nextZoom = lenses[nextIndex]
+        selectLens(nextZoom)
+    }
+
+    public func setExposureCompensation(_ ev: Float) {
+        exposureCompensation = ev
+        cameraService.setExposureTargetBias(ev)
+    }
+
+    public func openResultViewer() {
+        if resultImage != nil {
+            screenState = .result
+        } else {
+            hintMessage = NSLocalizedString("no_photos_yet", comment: "")
+        }
     }
 
     public func flipCamera() {
@@ -264,23 +289,10 @@ public final class CameraViewModel: ObservableObject {
 
             self.companionVideoURL = videoURL
             self.resultImage = finalImage
+            self.lastSavedThumbnail = finalImage
             self.processingProgress = 1.0
             self.screenState = .result
             self.captureState = .result
-        }
-    }
-            let crop = frameAligner?.cropBounds
-            let finalImage = await blenderEngine.finalizeResult(cropBounds: crop)
-
-            var videoURL: URL? = nil
-            if settings.saveCompanionVideo {
-                videoURL = await videoWriter.finishWriting()
-            }
-
-            self.companionVideoURL = videoURL
-            self.resultImage = finalImage
-            self.processingProgress = 1.0
-            self.screenState = .result
         }
     }
 

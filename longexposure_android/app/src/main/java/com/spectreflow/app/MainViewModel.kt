@@ -72,7 +72,9 @@ data class UiState(
     val isFrontCamera: Boolean = false,
     val savedUri: Uri? = null,
     val showPermissionDialog: Boolean = false,
-    val isLimitedAccess: Boolean = false
+    val isLimitedAccess: Boolean = false,
+    val exposureCompensation: Float = 0f,
+    val lastSavedThumbnail: Bitmap? = null
 )
 
 data class AppCrashInfo(
@@ -370,6 +372,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = _uiState.value.copy(
                     currentScreen = AppScreen.RESULT,
                     resultBitmap = finalBitmap,
+                    lastSavedThumbnail = finalBitmap,
                     keyframes = burstKeyframes.toList(),
                     companionVideoUri = videoUri,
                     companionVideoFile = finalizedVideoFile,
@@ -542,6 +545,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         } catch (e: Exception) {
             // Ignore if vibration unsupported
+        }
+    }
+
+    fun onExposureCompensationChanged(ev: Float) {
+        _uiState.value = _uiState.value.copy(exposureCompensation = ev)
+    }
+
+    fun onOpenResultViewer() {
+        if (_uiState.value.resultBitmap != null) {
+            _uiState.value = _uiState.value.copy(currentScreen = AppScreen.RESULT)
+        } else {
+            _uiState.value = _uiState.value.copy(
+                hintMessage = getApplication<Application>().getString(R.string.no_photos_yet)
+            )
         }
     }
 

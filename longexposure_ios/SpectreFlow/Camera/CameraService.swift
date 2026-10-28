@@ -73,6 +73,18 @@ public final class CameraService: NSObject, ObservableObject, AVCaptureVideoData
         }
     }
 
+    public func setExposureTargetBias(_ bias: Float) {
+        guard let device = videoDevice else { return }
+        do {
+            try device.lockForConfiguration()
+            let clamped = max(device.minExposureTargetBias, min(bias, device.maxExposureTargetBias))
+            device.setExposureTargetBias(clamped, completionHandler: nil)
+            device.unlockForConfiguration()
+        } catch {
+            print("Failed to set exposure bias: \(error)")
+        }
+    }
+
     private func setupCamera(position: AVCaptureDevice.Position) {
         captureSession.beginConfiguration()
         if captureSession.canSetSessionPreset(.hd1920x1080) {

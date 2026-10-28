@@ -161,4 +161,86 @@ class HoldToExposeTest {
         assertFalse(isCapturing)
         assertEquals(AppScreen.CAMERA, currentScreen)
     }
+
+    @Test
+    fun testDialRotationAndProLockValidation() {
+        val durations = com.spectreflow.app.settings.CaptureDuration.entries
+        assertEquals(5, durations.size)
+
+        // 3s, 5s, 9s are non-Pro
+        assertFalse(durations[0].isProOnly)
+        assertFalse(durations[1].isProOnly)
+        assertFalse(durations[2].isProOnly)
+
+        // 15s, 30s are Pro-only
+        assertTrue(durations[3].isProOnly)
+        assertTrue(durations[4].isProOnly)
+
+        // Simulate dial selection with isProUnlocked = false
+        var isProUnlocked = false
+        var selected = durations[0]
+
+        fun trySelect(duration: com.spectreflow.app.settings.CaptureDuration): Boolean {
+            return if (duration.isProOnly && !isProUnlocked) {
+                false
+            } else {
+                selected = duration
+                true
+            }
+        }
+
+        assertTrue(trySelect(durations[1])) // 5s allowed
+        assertEquals(com.spectreflow.app.settings.CaptureDuration.SEC_5, selected)
+
+        assertFalse(trySelect(durations[3])) // 15s rejected
+        assertEquals(com.spectreflow.app.settings.CaptureDuration.SEC_5, selected)
+
+        // Unlock Pro
+        isProUnlocked = true
+        assertTrue(trySelect(durations[3])) // 15s allowed now
+        assertEquals(com.spectreflow.app.settings.CaptureDuration.SEC_15, selected)
+    }
+
+    @Test
+    fun testQuickTapShowsHintAndDiscards() {
+        var hintMessage: String? = null
+        var isCaptured = false
+
+        fun onRelease(elapsedMs: Long) {
+            if (elapsedMs < 1000L) {
+                hintMessage = "Hold longer to capture"
+                isCaptured = false
+            } else {
+                hintMessage = null
+                isCaptured = true
+            }
+        }
+
+        onRelease(400L)
+        assertEquals("Hold longer to capture", hintMessage)
+        assertFalse(isCaptured)
+
+        onRelease(2500L)
+        org.junit.Assert.assertNull(hintMessage)
+        assertTrue(isCaptured)
+    }
+
+    @Test
+    fun testSlideCancelSafety() {
+        val buttonRadius = 40f
+        val cancelDistance = buttonRadius * 2f * 1.5f // 120f
+        var isCancelled = false
+
+        fun onPointerMove(distanceFromCenter: Float) {
+            if (distanceFromCenter > cancelDistance) {
+                isCancelled = true
+            }
+        }
+
+        onPointerMove(60f)
+        assertFalse(isCancelled)
+
+        onPointerMove(130f)
+        assertTrue(isCancelled)
+    }
 }

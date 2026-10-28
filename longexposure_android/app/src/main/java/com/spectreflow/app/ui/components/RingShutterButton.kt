@@ -1,9 +1,14 @@
 package com.spectreflow.app.ui.components
 
+import android.view.HapticFeedbackConstants
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -21,6 +26,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -33,16 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spectreflow.app.R
 import com.spectreflow.app.ui.theme.AccentEmerald
-import com.spectreflow.app.ui.theme.AccentMint
 import java.util.Locale
 
 /**
- * Press-and-Hold Shutter Button for Long Exposure.
- *
- * Interaction:
- * - Press & Hold: Starts burst capture, tracks duration, fills progress ring.
- * - Release: Stops capture and initiates processing (if hold >= 1s).
- * - Slide away: Cancels capture if dragged far outside button bounds.
+ * Large dual-ring shutter button matching reference design:
+ * - Two concentric green rings: outer ring + inner ring.
+ * - Press and hold to expose, release to capture.
+ * - While holding: inner ring pulses, outer ring arc fills toward cap, elapsed time "00:07" displayed.
+ * - Tactile haptic pulse on press down and release.
  */
 @Composable
 fun RingShutterButton(
@@ -54,26 +58,40 @@ fun RingShutterButton(
     onPressCancel: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonSize: Dp = 88.dp
+    buttonSize: Dp = 82.dp
 ) {
+    val view = LocalView.current
+
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = tween(durationMillis = 80),
         label = "shutter_progress"
     )
 
-        val shutterCapturingDesc = stringResource(R.string.cd_shutter_capturing)
-        val shutterIdleDesc = stringResource(R.string.cd_shutter_idle)
+    // Pulse animation for inner ring during capture
+    val infiniteTransition = rememberInfiniteTransition(label = "pulse_transition")
+    val pulseScale by infiniteTransition.animateFloat(
+        initialValue = 0.92f,
+        targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(650, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shutter_pulse"
+    )
 
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier
-                .size(buttonSize)
-                .clip(CircleShape)
-                .semantics {
-                    role = Role.Button
-                    contentDescription = if (isCapturing) shutterCapturingDesc else shutterIdleDesc
-                }
+    val shutterCapturingDesc = stringResource(R.string.cd_shutter_capturing)
+    val shutterIdleDesc = stringResource(R.string.cd_shutter_idle)
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(buttonSize)
+            .clip(CircleShape)
+            .semantics {
+                role = Role.Button
+                contentDescription = if (isCapturing) shutterCapturingDesc else shutterIdleDesc
+            }
             .pointerInput(enabled) {
                 if (!enabled) return@pointerInput
                 try {
@@ -83,6 +101,7 @@ fun RingShutterButton(
                             val center = Offset(size.width / 2f, size.height / 2f)
                             val cancelDistance = size.width * 1.5f
                             try {
+                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 onPressStart()
                             } catch (t: Throwable) {
                                 android.util.Log.e("RingShutterButton", "onPressStart failed", t)
@@ -104,6 +123,7 @@ fun RingShutterButton(
                             }
 
                             try {
+                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 if (isCancelled) {
                                     onPressCancel()
                                 } else {
@@ -120,69 +140,65 @@ fun RingShutterButton(
             }
     ) {
         Canvas(modifier = Modifier.size(buttonSize)) {
-            val strokeWidth = 5.dp.toPx()
-            val diameter = buttonSize.toPx() - strokeWidth
-            val radius = diameter / 2f
+            val strokeW = 3.5.dp.toPx()
+            val outerDiameter = buttonSize.toPx() - strokeW
+            val outerRadius = outerDiameter / 2f
             val centerOffset = Offset(buttonSize.toPx() / 2f, buttonSize.toPx() / 2f)
 
-            // Outer background track ring
-            drawCircle(
-                color = Color(0x3300E676),
-                radius = radius,
-                center = centerOffset,
-                style = Stroke(width = strokeWidth)
-            )
-
-            // Active progress ring arc
+            // 1. Outer Ring
             if (isCapturing) {
+                // Dim background track
+                drawCircle(
+                    color = Color(0x331ED98B),
+                    radius = outerRadius,
+                    center = centerOffset,
+                    style = Stroke(width = strokeW)
+                )
+                // Active progress arc
                 drawArc(
                     color = AccentEmerald,
                     startAngle = -90f,
                     sweepAngle = 360f * animatedProgress,
                     useCenter = false,
-                    topLeft = Offset(strokeWidth / 2f, strokeWidth / 2f),
-                    size = Size(diameter, diameter),
-                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                    topLeft = Offset(strokeW / 2f, strokeW / 2f),
+                    size = Size(outerDiameter, outerDiameter),
+                    style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Round)
                 )
             } else {
+                // Idle outer green circle stroke
                 drawCircle(
                     color = AccentEmerald,
-                    radius = radius,
+                    radius = outerRadius,
                     center = centerOffset,
-                    style = Stroke(width = strokeWidth)
+                    style = Stroke(width = strokeW)
                 )
             }
+
+            // 2. Inner Ring
+            val baseInnerRadius = outerRadius * 0.72f
+            val effectiveInnerRadius = if (isCapturing) baseInnerRadius * pulseScale else baseInnerRadius
+            val innerStrokeW = if (isCapturing) 3.dp.toPx() else 3.5.dp.toPx()
+
+            drawCircle(
+                color = AccentEmerald,
+                radius = effectiveInnerRadius,
+                center = centerOffset,
+                style = Stroke(width = innerStrokeW)
+            )
         }
 
-        // Inner Core Content
+        // 3. Center Elapsed Time Readout during capture
         if (isCapturing) {
-            // Live elapsed time counter formatted as 00:xx
             val secondsInt = elapsedSeconds.toInt()
             val timeText = String.format(Locale.US, "00:%02d", secondsInt)
 
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background(Color(0x3300E676))
-            ) {
-                Text(
-                    text = timeText,
-                    color = Color.White,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Monospace,
-                    letterSpacing = 0.5.sp
-                )
-            }
-        } else {
-            // Idle Mint shutter disc
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(AccentMint)
+            Text(
+                text = timeText,
+                color = Color.White,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace,
+                letterSpacing = 0.5.sp
             )
         }
     }

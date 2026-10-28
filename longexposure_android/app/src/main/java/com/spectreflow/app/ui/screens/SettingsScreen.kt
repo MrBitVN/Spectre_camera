@@ -19,9 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.HelpOutline
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spectreflow.app.R
 import com.spectreflow.app.settings.AppIconTheme
-import com.spectreflow.app.settings.AppLanguage
 import com.spectreflow.app.settings.AppSettingsState
 import com.spectreflow.app.settings.OutputResolution
 import com.spectreflow.app.ui.theme.AccentEmerald
@@ -92,7 +91,33 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Grid Setting
+        // 1. Tutorials Navigation Row
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(BgCard)
+                .clickable(onClick = onOpenOnboarding)
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.HelpOutline, contentDescription = null, tint = AccentEmerald, modifier = Modifier.size(22.dp))
+                Spacer(modifier = Modifier.size(12.dp))
+                Text(
+                    text = stringResource(R.string.tutorials_title),
+                    color = TextPrimary,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(18.dp))
+        }
+
+        HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
+
+        // 2. Grid Overlay Setting
         SettingToggleRow(
             title = stringResource(R.string.setting_grid),
             isChecked = settings.showGrid,
@@ -101,7 +126,7 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Haptic Feedback
+        // 3. Haptic Feedback Setting
         SettingToggleRow(
             title = stringResource(R.string.setting_haptics),
             isChecked = settings.hapticEnabled,
@@ -110,7 +135,7 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Companion Video Setting
+        // 4. Save Companion Video Setting
         SettingToggleRow(
             title = stringResource(R.string.setting_companion_video),
             subtitle = stringResource(R.string.setting_companion_video_desc),
@@ -120,7 +145,7 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Resolution Setting
+        // 5. Photo Quality / Output Resolution
         Text(
             text = stringResource(R.string.setting_resolution),
             color = TextPrimary,
@@ -146,7 +171,7 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Custom App Icon Themes
+        // 6. Custom App Icon Themes
         Text(
             text = stringResource(R.string.setting_app_icon),
             color = TextPrimary,
@@ -176,7 +201,7 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Pro Status Toggle (Stubbed for Google Play Billing KTX)
+        // 7. Unlock Pro (Stubbed)
         SettingToggleRow(
             title = stringResource(R.string.setting_pro_status),
             subtitle = stringResource(R.string.setting_pro_desc),
@@ -186,24 +211,35 @@ fun SettingsScreen(
 
         HorizontalDivider(color = BorderSubtle, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-        // Re-open Tutorial / Onboarding
-        Button(
-            onClick = onOpenOnboarding,
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = BgCard, contentColor = TextPrimary),
+        // 8. About SpectreFlow
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(BgCard)
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.Top
         ) {
-            Icon(Icons.Default.HelpOutline, contentDescription = null, tint = AccentMint, modifier = Modifier.size(18.dp))
-            Text(
-                text = " " + stringResource(R.string.action_view_tutorial),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Icon(Icons.Default.Info, contentDescription = null, tint = AccentEmerald, modifier = Modifier.size(20.dp).padding(top = 2.dp))
+            Spacer(modifier = Modifier.size(12.dp))
+            Column {
+                Text(
+                    text = stringResource(R.string.setting_about) + " v1.0.0",
+                    color = TextPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.setting_about_desc),
+                    color = TextSecondary,
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(36.dp))
     }
 }
 

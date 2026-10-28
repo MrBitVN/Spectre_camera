@@ -11,8 +11,34 @@ public struct SettingsView: View {
                 Color.bgObsidian.ignoresSafeArea()
 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        // Grid Toggle
+                    VStack(alignment: .leading, spacing: 18) {
+                        // 1. Tutorials Row
+                        Button {
+                            onOpenOnboarding()
+                        } label: {
+                            HStack {
+                                Image(systemName: "questionmark.circle.fill")
+                                    .foregroundColor(.accentEmerald)
+                                    .font(.system(size: 20))
+
+                                Text(NSLocalizedString("tutorials_title", comment: ""))
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(.textPrimary)
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.textSecondary)
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .padding(14)
+                            .background(Color.bgSurface.opacity(0.85))
+                            .cornerRadius(14)
+                        }
+
+                        Divider().background(Color.borderSubtle)
+
+                        // 2. Grid Toggle
                         Toggle(isOn: $settings.showGrid) {
                             Text(NSLocalizedString("setting_grid", comment: ""))
                                 .foregroundColor(.textPrimary)
@@ -21,7 +47,7 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Haptics Toggle
+                        // 3. Haptics Toggle
                         Toggle(isOn: $settings.hapticsEnabled) {
                             Text(NSLocalizedString("setting_haptics", comment: ""))
                                 .foregroundColor(.textPrimary)
@@ -30,7 +56,7 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Companion Video / Live Photo Toggle
+                        // 4. Companion Video / Live Photo Toggle
                         Toggle(isOn: $settings.saveCompanionVideo) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(NSLocalizedString("setting_companion_video", comment: ""))
@@ -44,7 +70,7 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Resolution Setting
+                        // 5. Resolution / Photo Quality Setting
                         VStack(alignment: .leading, spacing: 8) {
                             Text(NSLocalizedString("setting_resolution", comment: ""))
                                 .font(.system(size: 15, weight: .medium))
@@ -74,7 +100,7 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Custom App Icon Themes
+                        // 6. Custom App Icon Themes
                         VStack(alignment: .leading, spacing: 8) {
                             Text(NSLocalizedString("setting_app_icon", comment: ""))
                                 .font(.system(size: 15, weight: .medium))
@@ -108,7 +134,7 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // Pro Unlock Toggle (Stubbed for StoreKit 2)
+                        // 7. Pro Unlock Toggle (Stubbed for StoreKit 2)
                         Toggle(isOn: $settings.isProUnlocked) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(NSLocalizedString("setting_pro_unlocked", comment: ""))
@@ -122,23 +148,26 @@ public struct SettingsView: View {
 
                         Divider().background(Color.borderSubtle)
 
-                        // View Tutorial Button
-                        Button {
-                            onOpenOnboarding()
-                        } label: {
-                            HStack {
-                                Image(systemName: "questionmark.circle.fill")
-                                    .foregroundColor(.accentMint)
-                                Text(NSLocalizedString("action_view_tutorial", comment: ""))
-                                    .font(.system(size: 14, weight: .medium))
+                        // 8. About SpectreFlow
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "info.circle.fill")
+                                .foregroundColor(.accentEmerald)
+                                .font(.system(size: 18))
+                                .padding(.top, 2)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(NSLocalizedString("setting_about", comment: "") + " v1.0.0")
+                                    .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(.textPrimary)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.textSecondary)
+                                Text(NSLocalizedString("setting_about_desc", comment: ""))
                                     .font(.system(size: 12))
+                                    .foregroundColor(.textSecondary)
+                                    .lineSpacing(3)
                             }
-                            .padding(.vertical, 8)
                         }
+                        .padding(14)
+                        .background(Color.bgSurface.opacity(0.85))
+                        .cornerRadius(14)
                     }
                     .padding(20)
                 }

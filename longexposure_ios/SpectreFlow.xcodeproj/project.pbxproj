@@ -43,6 +43,11 @@
 		A100006829B7F00100000001 /* LensSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006929B7F00100000001 /* LensSelector.swift */; };
 		A100006A29B7F00100000001 /* TakeLongExposureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */; };
 		A100006C29B7F00100000001 /* HoldToExposeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100006D29B7F00100000001 /* HoldToExposeTests.swift */; };
+		A100007029B7F00100000001 /* RotaryDurationDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007129B7F00100000001 /* RotaryDurationDial.swift */; };
+		A100007229B7F00100000001 /* StabilityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007329B7F00100000001 /* StabilityIndicator.swift */; };
+		A100007429B7F00100000001 /* TopBarControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007529B7F00100000001 /* TopBarControls.swift */; };
+		A100007629B7F00100000001 /* FloatingZoomPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007729B7F00100000001 /* FloatingZoomPill.swift */; };
+		A100007829B7F00100000001 /* TutorialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100007929B7F00100000001 /* TutorialsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +89,11 @@
 		A100006929B7F00100000001 /* LensSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/LensSelector.swift; sourceTree = "<group>"; };
 		A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts/TakeLongExposureIntent.swift; sourceTree = "<group>"; };
 		A100006D29B7F00100000001 /* HoldToExposeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToExposeTests.swift; sourceTree = "<group>"; };
+		A100007129B7F00100000001 /* RotaryDurationDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/RotaryDurationDial.swift; sourceTree = "<group>"; };
+		A100007329B7F00100000001 /* StabilityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/StabilityIndicator.swift; sourceTree = "<group>"; };
+		A100007529B7F00100000001 /* TopBarControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/TopBarControls.swift; sourceTree = "<group>"; };
+		A100007729B7F00100000001 /* FloatingZoomPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/FloatingZoomPill.swift; sourceTree = "<group>"; };
+		A100007929B7F00100000001 /* TutorialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/TutorialsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -183,6 +193,11 @@
 				A100002C29B7F00100000001 /* ResultView.swift */,
 				A100002E29B7F00100000001 /* SettingsView.swift */,
 				A100003029B7F00100000001 /* PermissionRationaleView.swift */,
+				A100007129B7F00100000001 /* RotaryDurationDial.swift */,
+				A100007329B7F00100000001 /* StabilityIndicator.swift */,
+				A100007529B7F00100000001 /* TopBarControls.swift */,
+				A100007729B7F00100000001 /* FloatingZoomPill.swift */,
+				A100007929B7F00100000001 /* TutorialsView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -325,6 +340,11 @@
 				A100003729B7F00100000001 /* BlendingMathTests.swift in Sources */,
 				A100003929B7F00100000001 /* AlignmentMathTests.swift in Sources */,
 				A100006C29B7F00100000001 /* HoldToExposeTests.swift in Sources */,
+				A100007029B7F00100000001 /* RotaryDurationDial.swift in Sources */,
+				A100007229B7F00100000001 /* StabilityIndicator.swift in Sources */,
+				A100007429B7F00100000001 /* TopBarControls.swift in Sources */,
+				A100007629B7F00100000001 /* FloatingZoomPill.swift in Sources */,
+				A100007829B7F00100000001 /* TutorialsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

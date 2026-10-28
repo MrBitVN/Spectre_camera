@@ -80,6 +80,16 @@ class CameraXManager(private val context: Context) {
         currentZoom = ratio
     }
 
+    fun setExposureCompensation(ev: Float) {
+        val cam = camera ?: return
+        val range = cam.cameraInfo.exposureState.exposureCompensationRange
+        val step = cam.cameraInfo.exposureState.exposureCompensationStep.toFloat()
+        if (step > 0f) {
+            val index = (ev / step).toInt().coerceIn(range.lower, range.upper)
+            cam.cameraControl.setExposureCompensationIndex(index)
+        }
+    }
+
     fun bindCamera(
         lifecycleOwner: LifecycleOwner,
         surfaceProvider: Preview.SurfaceProvider
