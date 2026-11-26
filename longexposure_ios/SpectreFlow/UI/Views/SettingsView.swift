@@ -77,7 +77,7 @@ public struct SettingsView: View {
                                 .foregroundColor(.textPrimary)
 
                             HStack(spacing: 12) {
-                                ForEach(OutputResolution.allCases) { res in
+                                ForEach(OutputResolution.allCases, id: \.self) { res in
                                     let isSelected = settings.resolution == res
                                     Button {
                                         settings.resolution = res
@@ -107,7 +107,7 @@ public struct SettingsView: View {
                                 .foregroundColor(.textPrimary)
 
                             HStack(spacing: 10) {
-                                ForEach(AppIconTheme.allCases) { iconTheme in
+                                ForEach(AppIconTheme.allCases, id: \.self) { iconTheme in
                                     let isSelected = settings.selectedAppIcon == iconTheme
                                     let isLocked = iconTheme != .obsidianEmerald && !settings.isProUnlocked
 

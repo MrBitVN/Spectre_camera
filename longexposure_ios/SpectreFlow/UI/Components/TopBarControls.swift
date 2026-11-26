@@ -50,7 +50,7 @@ public struct TopBarControls: View {
             HStack {
                 // Mode Label & Lightbulb Menu: "AUTO 💡"
                 Menu {
-                    ForEach(LongExposureMode.allCases) { mode in
+                    ForEach(LongExposureMode.allCases, id: \.self) { mode in
                         Button {
                             selectedMode = mode
                             onSelectMode(mode)

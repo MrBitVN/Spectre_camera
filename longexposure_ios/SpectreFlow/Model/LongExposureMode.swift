@@ -16,4 +16,8 @@ public enum LongExposureMode: String, CaseIterable, Identifiable {
         case .vanish: return "mode_vanish"
         }
     }
+
+    public var displayName: String {
+        return NSLocalizedString(titleKey, comment: "")
+    }
 }

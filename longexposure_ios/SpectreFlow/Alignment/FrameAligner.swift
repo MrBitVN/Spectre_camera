@@ -59,7 +59,7 @@ public final class FrameAligner {
 
         do {
             try handler.perform([registrationRequest], on: refBuffer)
-            if let observation = registrationRequest.results?.first as? VNImageTranslationObservation {
+            if let observation = registrationRequest.results?.first as? VNImageTranslationAlignmentObservation {
                 let transform = observation.alignmentTransform
                 deltaX = transform.tx
                 deltaY = transform.ty
