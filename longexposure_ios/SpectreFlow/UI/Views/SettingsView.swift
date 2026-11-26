@@ -83,7 +83,7 @@ public struct SettingsView: View {
                                         settings.resolution = res
                                     } label: {
                                         Text(res == .high ? NSLocalizedString("resolution_high", comment: "") : NSLocalizedString("resolution_balanced", comment: ""))
-                                            .font(.system(size: 13, weight: isSelected ? .bold : .normal))
+                                            .font(.system(size: 13, weight: isSelected ? .bold : .regular))
                                             .foregroundColor(isSelected ? .accentEmerald : .textSecondary)
                                             .padding(.horizontal, 14)
                                             .padding(.vertical, 8)
@@ -117,7 +117,7 @@ public struct SettingsView: View {
                                         }
                                     } label: {
                                         Text(iconTheme.displayName)
-                                            .font(.system(size: 12, weight: isSelected ? .bold : .normal))
+                                            .font(.system(size: 12, weight: isSelected ? .bold : .regular))
                                             .foregroundColor(isSelected ? .accentEmerald : (isLocked ? .textSecondary.opacity(0.5) : .textSecondary))
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 8)
