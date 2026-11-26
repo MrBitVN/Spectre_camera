@@ -94,7 +94,23 @@ Spectre_camera/
 
 ## 🛠️ Building & Running
 
-### Android
+### GitHub Actions CI/CD (Automated APK & IPA Builds)
+A continuous integration workflow is configured in `.github/workflows/build.yml` that automatically builds both platforms on every push:
+- **Android Job (`ubuntu-latest`):** Compiles 100% native Kotlin + Jetpack Compose, executes unit tests, builds `SpectreFlow.apk`, and uploads it as artifact `SpectreFlow-Android-APK`.
+- **iOS Job (`macos-14`):** Compiles 100% native Swift + SwiftUI + Metal shaders, executes XCTest suite on iOS Simulator, packages `SpectreFlow.ipa`, and uploads it as artifact `SpectreFlow-iOS-IPA`.
+
+#### Downloading Prebuilt Artifacts from GitHub:
+1. Navigate to the **Actions** tab on the GitHub repository: [github.com/MrBitVN/Spectre_camera/actions](https://github.com/MrBitVN/Spectre_camera/actions).
+2. Click on the latest workflow run.
+3. Scroll down to the **Artifacts** section:
+   - **`SpectreFlow-Android-APK`**: Download and install directly via ADB or Android package installer.
+   - **`SpectreFlow-iOS-IPA`**: Download and sideload onto any iPhone / iPad using **AltStore**, **Sideloadly**, **TrollStore**, or **Scarlet**.
+
+---
+
+### Local Building
+
+#### Android
 - **Requirements:** Android Studio Hedgehog+ / JDK 17 / Android SDK 34 (minSdk 26).
 - **CLI Build & Test:**
   ```powershell
@@ -106,7 +122,7 @@ Spectre_camera/
   adb install -r app/build/outputs/apk/debug/app-debug.apk
   ```
 
-### iOS
+#### iOS
 - **Requirements:** macOS with Xcode 15+ / iOS 16.0+ deployment target.
 - **Build & Run:**
   1. Open `longexposure_ios/SpectreFlow.xcodeproj` in Xcode.

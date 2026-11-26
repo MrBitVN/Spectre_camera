@@ -66,20 +66,20 @@
 		A100001429B7F00100000001 /* MotionStabilityDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionStabilityDetector.swift; sourceTree = "<group>"; };
 		A100001629B7F00100000001 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		A100001829B7F00100000001 /* PhotoLibrarySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrarySaver.swift; sourceTree = "<group>"; };
-		A100001A29B7F00100000001 /* Color+SpectreFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+SpectreFlow.swift"; sourceTree = "<group>"; };
-		A100001C29B7F00100000001 /* RingShutterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingShutterButton.swift; sourceTree = "<group>"; };
-		A100001E29B7F00100000001 /* StabilityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StabilityBadge.swift; sourceTree = "<group>"; };
-		A100002029B7F00100000001 /* DurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationSelector.swift; sourceTree = "<group>"; };
-		A100002229B7F00100000001 /* ModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelector.swift; sourceTree = "<group>"; };
-		A100002429B7F00100000001 /* GridOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
-		A100002629B7F00100000001 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
-		A100002829B7F00100000001 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		A100002A29B7F00100000001 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
-		A100002C29B7F00100000001 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
-		A100002E29B7F00100000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		A100003029B7F00100000001 /* PermissionRationaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRationaleView.swift; sourceTree = "<group>"; };
+		A100001A29B7F00100000001 /* Color+SpectreFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme/Color+SpectreFlow.swift"; sourceTree = "<group>"; };
+		A100001C29B7F00100000001 /* RingShutterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/RingShutterButton.swift; sourceTree = "<group>"; };
+		A100001E29B7F00100000001 /* StabilityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/StabilityBadge.swift; sourceTree = "<group>"; };
+		A100002029B7F00100000001 /* DurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/DurationSelector.swift; sourceTree = "<group>"; };
+		A100002229B7F00100000001 /* ModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/ModeSelector.swift; sourceTree = "<group>"; };
+		A100002429B7F00100000001 /* GridOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/GridOverlay.swift; sourceTree = "<group>"; };
+		A100002629B7F00100000001 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/CameraPreviewView.swift; sourceTree = "<group>"; };
+		A100002829B7F00100000001 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/CameraView.swift; sourceTree = "<group>"; };
+		A100002A29B7F00100000001 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ProcessingView.swift; sourceTree = "<group>"; };
+		A100002C29B7F00100000001 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ResultView.swift; sourceTree = "<group>"; };
+		A100002E29B7F00100000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/SettingsView.swift; sourceTree = "<group>"; };
+		A100003029B7F00100000001 /* PermissionRationaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/PermissionRationaleView.swift; sourceTree = "<group>"; };
 		A100003229B7F00100000001 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
-		A100003429B7F00100000001 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		A100003429B7F00100000001 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Metal/Shaders.metal; sourceTree = "<group>"; };
 		A100003629B7F00100000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A100003829B7F00100000001 /* BlendingMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendingMathTests.swift; sourceTree = "<group>"; };
 		A100003A29B7F00100000001 /* AlignmentMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentMathTests.swift; sourceTree = "<group>"; };
@@ -87,17 +87,17 @@
 		A100006129B7F00100000001 /* SceneDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AI/SceneDetector.swift; sourceTree = "<group>"; };
 		A100006329B7F00100000001 /* CompanionVideoWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video/CompanionVideoWriter.swift; sourceTree = "<group>"; };
 		A100006529B7F00100000001 /* ProSubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Billing/ProSubscriptionManager.swift; sourceTree = "<group>"; };
-		A100006729B7F00100000001 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/OnboardingView.swift; sourceTree = "<group>"; };
-		A100006929B7F00100000001 /* LensSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/LensSelector.swift; sourceTree = "<group>"; };
+		A100006729B7F00100000001 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/OnboardingView.swift; sourceTree = "<group>"; };
+		A100006929B7F00100000001 /* LensSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/LensSelector.swift; sourceTree = "<group>"; };
 		A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts/TakeLongExposureIntent.swift; sourceTree = "<group>"; };
 		A100006D29B7F00100000001 /* HoldToExposeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToExposeTests.swift; sourceTree = "<group>"; };
-		A100007129B7F00100000001 /* RotaryDurationDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/RotaryDurationDial.swift; sourceTree = "<group>"; };
-		A100007329B7F00100000001 /* StabilityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/StabilityIndicator.swift; sourceTree = "<group>"; };
-		A100007529B7F00100000001 /* TopBarControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/TopBarControls.swift; sourceTree = "<group>"; };
-		A100007729B7F00100000001 /* FloatingZoomPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Components/FloatingZoomPill.swift; sourceTree = "<group>"; };
-		A100007929B7F00100000001 /* TutorialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/TutorialsView.swift; sourceTree = "<group>"; };
-		A100007B29B7F00100000001 /* PhotoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage/PhotoRepository.swift; sourceTree = "<group>"; };
-		A100007D29B7F00100000001 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI/Views/GalleryView.swift; sourceTree = "<group>"; };
+		A100007129B7F00100000001 /* RotaryDurationDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/RotaryDurationDial.swift; sourceTree = "<group>"; };
+		A100007329B7F00100000001 /* StabilityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/StabilityIndicator.swift; sourceTree = "<group>"; };
+		A100007529B7F00100000001 /* TopBarControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/TopBarControls.swift; sourceTree = "<group>"; };
+		A100007729B7F00100000001 /* FloatingZoomPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/FloatingZoomPill.swift; sourceTree = "<group>"; };
+		A100007929B7F00100000001 /* TutorialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TutorialsView.swift; sourceTree = "<group>"; };
+		A100007B29B7F00100000001 /* PhotoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRepository.swift; sourceTree = "<group>"; };
+		A100007D29B7F00100000001 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/GalleryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -124,6 +124,10 @@
 				A100004629B7F00100000001 /* UI */,
 				A100004729B7F00100000001 /* ViewModel */,
 				A100004829B7F00100000001 /* Resources */,
+				A100006129B7F00100000001 /* SceneDetector.swift */,
+				A100006329B7F00100000001 /* CompanionVideoWriter.swift */,
+				A100006529B7F00100000001 /* ProSubscriptionManager.swift */,
+				A100006B29B7F00100000001 /* TakeLongExposureIntent.swift */,
 			);
 			path = SpectreFlow;
 			sourceTree = "<group>";
@@ -202,6 +206,8 @@
 				A100007329B7F00100000001 /* StabilityIndicator.swift */,
 				A100007529B7F00100000001 /* TopBarControls.swift */,
 				A100007729B7F00100000001 /* FloatingZoomPill.swift */,
+				A100006729B7F00100000001 /* OnboardingView.swift */,
+				A100006929B7F00100000001 /* LensSelector.swift */,
 				A100007929B7F00100000001 /* TutorialsView.swift */,
 				A100007D29B7F00100000001 /* GalleryView.swift */,
 			);
@@ -227,6 +233,7 @@
 		A100003E29B7F00100000001 /* SpectreFlowTests */ = {
 			isa = PBXGroup;
 			children = (
+				A100006D29B7F00100000001 /* HoldToExposeTests.swift */,
 				A100003829B7F00100000001 /* BlendingMathTests.swift */,
 				A100003A29B7F00100000001 /* AlignmentMathTests.swift */,
 			);
