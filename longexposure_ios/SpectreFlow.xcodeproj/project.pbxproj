@@ -80,7 +80,7 @@
 		A100003029B7F00100000001 /* PermissionRationaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/PermissionRationaleView.swift; sourceTree = "<group>"; };
 		A100003229B7F00100000001 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		A100003429B7F00100000001 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Metal/Shaders.metal; sourceTree = "<group>"; };
-		A100003629B7F00100000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A100003629B7F00100000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A100003829B7F00100000001 /* BlendingMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendingMathTests.swift; sourceTree = "<group>"; };
 		A100003A29B7F00100000001 /* AlignmentMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentMathTests.swift; sourceTree = "<group>"; };
 		A100003B29B7F00100000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };

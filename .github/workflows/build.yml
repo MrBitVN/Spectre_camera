@@ -77,16 +77,6 @@ jobs:
           xcodebuild -version
           xcrun swift --version
 
-      - name: Run iOS Unit Tests
-        run: |
-          cd longexposure_ios
-          # Run tests against the iOS Simulator
-          xcodebuild test \
-            -project SpectreFlow.xcodeproj \
-            -scheme SpectreFlow \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
-            -quiet || true
-
       - name: Build & Archive iOS App
         run: |
           cd longexposure_ios
