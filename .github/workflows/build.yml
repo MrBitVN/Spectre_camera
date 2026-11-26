@@ -67,7 +67,7 @@ jobs:
   # ==========================================
   ios:
     name: Build iOS IPA (Swift + SwiftUI + Metal)
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
